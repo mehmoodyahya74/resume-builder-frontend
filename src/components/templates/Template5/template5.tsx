@@ -1,6 +1,6 @@
 import React from "react";
 import { TemplateData } from "@/lib/types";
-import "./Template5.css";
+import "./template5.css";
 
 export const Template5 = ({ data }: { data: TemplateData }) => {
   // Languages array (your system doesn't have this, so we'll use skills or hardcode)
