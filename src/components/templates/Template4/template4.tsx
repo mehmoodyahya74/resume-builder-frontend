@@ -1,6 +1,6 @@
 import React from "react";
 import { TemplateData } from "@/lib/types";
-import "./Template4.css";
+import "./template4.css";
 
 export const Template4 = ({ data }: { data: TemplateData }) => {
   return (
