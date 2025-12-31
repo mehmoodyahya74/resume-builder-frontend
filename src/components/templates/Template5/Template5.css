@@ -1,0 +1,72 @@
+/* Template5.css - Corporate Blue Template */
+.template5-container {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+@media print {
+  .template5-container {
+    margin: 0;
+    box-shadow: none;
+    width: 100%;
+    height: auto;
+    min-height: auto;
+  }
+}
+
+/* Force A4 dimensions for printing */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  .template5-container {
+    width: 210mm !important;
+    min-height: 297mm !important;
+  }
+  
+  /* Ensure background colors print */
+  .bg-slate-900 {
+    background-color: #0f172a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .bg-slate-100 {
+    background-color: #f1f5f9 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .bg-slate-800 {
+    background-color: #1e293b !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .bg-slate-600 {
+    background-color: #475569 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-white {
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .border-slate-200 {
+    border-color: #e2e8f0 !important;
+  }
+  
+  .border-slate-300 {
+    border-color: #cbd5e1 !important;
+  }
+}

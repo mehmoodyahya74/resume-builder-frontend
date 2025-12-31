@@ -1,0 +1,122 @@
+.template8-container {
+  width: 216mm;
+  min-height: 303.2mm;
+  background: #1a1b26;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+  transform: scale(1);
+  box-sizing: border-box;
+}
+
+@media print {
+  .template8-container {
+    margin: 0;
+    box-shadow: none;
+    width: 216mm !important;
+    height: 303.2mm !important;
+    min-height: 303.2mm !important;
+    transform: scale(1) !important;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  .template8-container {
+    width: 216mm !important;
+    min-height: 303.2mm !important;
+  }
+  
+  .bg-\[\#1a1b26\] {
+    background-color: #1a1b26 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .bg-\[\#24283b\] {
+    background-color: #24283b !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-\[\#a9b1d6\] {
+    color: #a9b1d6 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-\[\#7aa2f7\] {
+    color: #7aa2f7 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-\[\#e0af68\] {
+    color: #e0af68 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-\[\#bb9af7\] {
+    color: #bb9af7 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-\[\#7dcfff\] {
+    color: #7dcfff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-\[\#565f89\] {
+    color: #565f89 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-\[\#c0caf5\] {
+    color: #c0caf5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-\[\#9aa5ce\] {
+    color: #9aa5ce !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .border-\[\#414868\] {
+    border-color: #414868 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .group:hover .group-hover\:text-\[\#7aa2f7\] {
+    color: #c0caf5 !important;
+  }
+  
+  .hover\:border-\[\#7aa2f7\]:hover {
+    border-color: #414868 !important;
+  }
+  
+  .hover\:text-\[\#7aa2f7\]:hover {
+    color: #9aa5ce !important;
+  }
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace !important;
+}
+
+@media print {
+  .font-mono {
+    font-family: 'Courier New', Courier, monospace !important;
+  }
+}

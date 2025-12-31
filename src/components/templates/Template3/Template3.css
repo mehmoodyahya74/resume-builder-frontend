@@ -1,0 +1,54 @@
+/* EXACT styling from your original template */
+.template3-container {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+@media print {
+  .template3-container {
+    margin: 0;
+    box-shadow: none;
+    width: 100%;
+    height: auto;
+    min-height: auto;
+  }
+}
+
+/* Force A4 dimensions for printing */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  .template3-container {
+    width: 210mm !important;
+    min-height: 297mm !important;
+  }
+}
+
+/* Ensure background colors print */
+@media print {
+  .bg-slate-100 {
+    background-color: #f8fafc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .bg-white {
+    background-color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .bg-slate-200 {
+    background-color: #e2e8f0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

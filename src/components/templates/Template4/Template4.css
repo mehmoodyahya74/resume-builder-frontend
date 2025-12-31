@@ -1,0 +1,74 @@
+/* Template4.css - Creative Bold Template */
+.template4-container {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+@media print {
+  .template4-container {
+    margin: 0;
+    box-shadow: none;
+    width: 100%;
+    height: auto;
+    min-height: auto;
+  }
+}
+
+/* Force A4 dimensions for printing */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  .template4-container {
+    width: 210mm !important;
+    min-height: 297mm !important;
+  }
+  
+  /* Ensure background colors print */
+  .bg-amber-400 {
+    background-color: #fbbf24 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .bg-black {
+    background-color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .bg-zinc-900 {
+    background-color: #18181b !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .bg-zinc-50 {
+    background-color: #fafafa !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .border-amber-400 {
+    border-color: #fbbf24 !important;
+  }
+  
+  .text-amber-400, .text-amber-600 {
+    color: #d97706 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .text-white {
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

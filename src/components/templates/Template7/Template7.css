@@ -1,0 +1,61 @@
+/* Template7.css - Classic ATS Template */
+.template7-container {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+@media print {
+  .template7-container {
+    margin: 0;
+    box-shadow: none;
+    width: 100%;
+    height: auto;
+    min-height: auto;
+  }
+}
+
+/* Force A4 dimensions for printing */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  .template7-container {
+    width: 210mm !important;
+    min-height: 297mm !important;
+  }
+  
+  /* Ensure borders print */
+  .border-black {
+    border-color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  /* Ensure text is black for ATS scanners */
+  .text-black {
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  /* Ensure list bullets print */
+  .list-disc {
+    list-style-type: disc !important;
+  }
+  
+  /* Simple fonts for ATS compatibility */
+  .font-serif {
+    font-family: "Times New Roman", Times, serif !important;
+  }
+  
+  .font-sans {
+    font-family: Arial, Helvetica, sans-serif !important;
+  }
+}
