@@ -1,7 +1,7 @@
 import React from "react";
 import { TemplateData } from "@/lib/types";
 import { MapPin, Mail, Phone, Globe } from "lucide-react";
-import "./Template3.css";
+import "./template3.css";
 
 interface Template3Props {
   data: TemplateData;
