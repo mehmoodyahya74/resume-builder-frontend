@@ -1,11 +1,11 @@
 import React from 'react';
 import { TemplateData } from '@/lib/types';
-import { Template2 } from '@/components/templates/Template2/Template2';
-import { Template3 } from '@/components/templates/Template3/Template3'; 
-import { Template4 } from '@/components/templates/Template4/Template4';
-import { Template5 } from '@/components/templates/Template5/Template5';
-import { Template7 } from '@/components/templates/Template7/Template7';
-import { Template8 } from '@/components/templates/Template8/Template8';
+import { Template2 } from '@/components/templates/Template2/Template2.tsx';
+import { Template3 } from '@/components/templates/Template3/Template3.tsx'; 
+import { Template4 } from '@/components/templates/Template4/Template4.tsx';
+import { Template5 } from '@/components/templates/Template5/Template5.tsx';
+import { Template7 } from '@/components/templates/Template7/Template7.tsx';
+import { Template8 } from '@/components/templates/Template8/Template8.tsx';
 
 interface TemplateContainerProps {
   data: TemplateData;
