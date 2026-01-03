@@ -19,7 +19,7 @@ export default function ResumeBuilder() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
 
-  const PDF_API_URL = 'http://localhost:5000/generate-pdf';
+  const PDF_API_URL = 'https://qamjr706a5.execute-api.us-east-1.amazonaws.com/prod/generate-pdf';
 
   const navigation = [
     { name: 'Home', href: '/' },
