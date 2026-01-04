@@ -19,7 +19,7 @@ export default function ResumeBuilder() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
 
-  const PDF_API_URL = 'http://resume-builder-backend-production-e167.up.railway.app/generate-pdf';
+  const PDF_API_URL = 'https://resume-builder-backend-production-e167.up.railway.app/generate-pdf';
 
   const navigation = [
     { name: 'Home', href: '/' },
