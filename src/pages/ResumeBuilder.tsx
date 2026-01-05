@@ -19,7 +19,7 @@ export default function ResumeBuilder() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
 
-  const PDF_API_URL = 'http://localhost:5000/generate-pdf';
+  const PDF_API_URL = 'https://rkak0mp4e7.execute-api.us-east-1.amazonaws.com/prod/generate-pdf';
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -29,7 +29,6 @@ export default function ResumeBuilder() {
     { name: 'Privacy Policy', href: '/privacy' },
   ];
 
-  // Helper function to escape regex special characters
   function escapeRegExp(string: string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
@@ -46,21 +45,17 @@ export default function ResumeBuilder() {
     try {
       console.log('🔄 Starting PDF generation...');
       
-      // 1. Get the HTML content
       let htmlContent = element.innerHTML;
       
-      // 2. Find all images in the HTML
       const imgTags = htmlContent.match(/<img[^>]+src="([^">]+)"/g) || [];
       console.log('Found img tags:', imgTags.length);
       
-      // 3. Create a set of unique image sources
       const imageSrcs = new Set<string>();
       imgTags.forEach(tag => {
         const match = tag.match(/src="([^"]+)"/);
         if (match && match[1]) {
           const src = match[1];
           
-          // Only process if it's NOT a base64 image (uploaded images are already base64)
           if (!src.startsWith('data:image/')) {
             imageSrcs.add(src);
           }
@@ -69,15 +64,12 @@ export default function ResumeBuilder() {
       
       console.log('Images to convert:', Array.from(imageSrcs));
       
-      // 4. Convert each non-base64 image to base64
       const imageConversionPromises = Array.from(imageSrcs).map(async (src) => {
         try {
-          // Skip external URLs and data URLs
           if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('data:')) {
             return { original: src, base64: src };
           }
           
-          // Handle relative paths
           let imageUrl = src;
           if (src.startsWith('/')) {
             imageUrl = window.location.origin + src;
@@ -87,11 +79,10 @@ export default function ResumeBuilder() {
           
           console.log(`Converting: ${src} -> ${imageUrl}`);
           
-          // Fetch and convert to base64
           const response = await fetch(imageUrl);
           if (!response.ok) {
             console.warn(`Failed to fetch ${imageUrl}: ${response.status}`);
-            return { original: src, base64: src }; // Keep original as fallback
+            return { original: src, base64: src };
           }
           
           const blob = await response.blob();
@@ -106,14 +97,12 @@ export default function ResumeBuilder() {
           
         } catch (error) {
           console.warn(`Failed to convert image ${src}:`, error);
-          return { original: src, base64: src }; // Keep original as fallback
+          return { original: src, base64: src };
         }
       });
       
-      // Wait for all conversions
       const convertedImages = await Promise.all(imageConversionPromises);
       
-      // 5. Replace all image sources in HTML
       convertedImages.forEach(({ original, base64 }) => {
         if (original !== base64) {
           const escapedOriginal = escapeRegExp(original);
@@ -124,7 +113,6 @@ export default function ResumeBuilder() {
         }
       });
       
-      // 6. Get all CSS styles
       const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
         .map(style => {
           if (style.tagName === 'STYLE') {
@@ -133,7 +121,6 @@ export default function ResumeBuilder() {
             const href = style.getAttribute('href');
             if (!href) return '';
             
-            // Make CSS URLs absolute
             if (href.startsWith('/')) {
               return `<link rel="stylesheet" href="${window.location.origin}${href}" />`;
             } else if (href.startsWith('http')) {
@@ -145,7 +132,6 @@ export default function ResumeBuilder() {
         })
         .join('');
       
-      // 7. Create complete HTML document
       const completeHTML = `
         <!DOCTYPE html>
         <html>
@@ -155,7 +141,6 @@ export default function ResumeBuilder() {
             <title>${resumeData.personalInfo.fullName} - Resume</title>
             ${styles}
             <style>
-              /* Critical CSS for PDF */
               @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap');
               
               body {
@@ -184,7 +169,6 @@ export default function ResumeBuilder() {
                 color-adjust: exact !important;
               }
               
-              /* Ensure background colors print */
               .template2-skill {
                 background-color: #e0f2fe !important;
                 color: #0369a1 !important;
@@ -200,9 +184,10 @@ export default function ResumeBuilder() {
       
       const fileName = `${resumeData.personalInfo.fullName.replace(/\s+/g, '_')}_Resume.pdf`;
       
-      console.log('📦 Sending HTML to PDF server...');
+      console.log('📦 Sending HTML to AWS Lambda...');
+      console.log('HTML length:', completeHTML.length);
       
-      // 8. Send to backend
+      // Send to Lambda
       const response = await fetch(PDF_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -210,35 +195,63 @@ export default function ResumeBuilder() {
           html: completeHTML,
           fileName: fileName
         }),
+        mode: 'cors'
       });
       
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server error: ${response.status} - ${errorText}`);
+        // Try to get error message
+        let errorMessage = `Server error: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage += ` - ${errorData.message || errorData.error}`;
+        } catch {
+          // If not JSON, get text
+          const errorText = await response.text();
+          errorMessage += ` - ${errorText}`;
+        }
+        throw new Error(errorMessage);
       }
       
-      // 9. Download PDF
-      const pdfBlob = await response.blob();
-      const url = window.URL.createObjectURL(pdfBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
+      // Lambda returns PDF directly - just download it
+      console.log('✅ Received response from Lambda, decoding PDF...');
+
+const data = await response.json();
+
+// 1️⃣ Decode base64
+const binary = atob(data.pdf);
+const bytes = new Uint8Array(binary.length);
+for (let i = 0; i < binary.length; i++) {
+  bytes[i] = binary.charCodeAt(i);
+}
+
+// 2️⃣ Create PDF Blob
+const pdfBlob = new Blob([bytes], { type: 'application/pdf' });
+
+// 3️⃣ Download
+const url = window.URL.createObjectURL(pdfBlob);
+const link = document.createElement('a');
+link.href = url;
+link.download = data.fileName || fileName;
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+window.URL.revokeObjectURL(url);
+
+console.log('✅ PDF downloaded successfully!');
+
       
-      // 10. Clean up
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      
-      console.log('✅ PDF generated successfully!');
+      console.log('✅ PDF downloaded successfully!');
       
     } catch (error) {
       console.error('❌ PDF generation failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
       alert(
-        `Failed to generate PDF:\n\n` +
-        `1. Make sure backend server is running on ${PDF_API_URL}\n` +
-        `2. Check that Chrome is installed\n` +
-        `3. Check browser console for details`
+        `PDF Generation Failed\n\n` +
+        `Error: ${errorMessage}\n\n` +
+        `1. Check browser console for details\n` +
+        `2. Make sure AWS Lambda is running\n` +
+        `3. Try with simpler resume content`
       );
     } finally {
       setIsGeneratingPDF(false);
@@ -260,7 +273,7 @@ export default function ResumeBuilder() {
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
               <div className="h-8 w-8 bg-gray-900 text-white flex items-center justify-center font-serif font-bold rounded">R</div>
-              <span className="font-serif font-bold text-xl tracking-tight">Resume<span className="text-gray-500">Builder</span></span>
+              <span className="font-serif font-bold text-xl tracking-tight">Resume<span className="text-gray500">Builder</span></span>
             </div>
           </Link>
           
