@@ -130,7 +130,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     
     setIsGenerating(true);
     try {
-      const response = await fetch('https://resume-ai-vercel-6whupkh0f-yahya-mehmoods-projects-d3e77816.vercel.app/api/generate-resume', {
+      const response = await fetch('https://corsproxy.io/?https://resume-ai-vercel-6whupkh0f-yahya-mehmoods-projects-d3e77816.vercel.app/api/generate-resume', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
                   'Origin': window.location.origin },
@@ -236,7 +236,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     
     setIsGenerating(true);
     try {
-      const response = await fetch('https://resume-ai-vercel-6whupkh0f-yahya-mehmoods-projects-d3e77816.vercel.app/api/enhance-resume', {
+      const response = await fetch('https://corsproxy.io/?https://resume-ai-vercel-6whupkh0f-yahya-mehmoods-projects-d3e77816.vercel.app/api/enhance-resume', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
                  'Origin': window.location.origin },
