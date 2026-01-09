@@ -137,7 +137,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     type,
     jobTitle: data.personalInfo.title,
     context
-  })
+  }),
         credentials: 'include'
 });
 
@@ -242,7 +242,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     type,
     jobTitle: data.personalInfo.title,
     originalContent
-  })
+  }),
         credentials: 'include'
 });
 
