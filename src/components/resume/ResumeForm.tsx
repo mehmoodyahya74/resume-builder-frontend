@@ -132,7 +132,8 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     try {
       const response = await fetch('https://resume-ai-vercel-6whupkh0f-yahya-mehmoods-projects-d3e77816.vercel.app/api/generate-resume', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json',
+                  'Origin': window.location.origin },
         body: JSON.stringify({
           type,
           jobTitle: data.personalInfo.title,
@@ -237,7 +238,8 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     try {
       const response = await fetch('https://resume-ai-vercel-6whupkh0f-yahya-mehmoods-projects-d3e77816.vercel.app/api/enhance-resume', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json',
+                 'Origin': window.location.origin },
         body: JSON.stringify({
           type,
           jobTitle: data.personalInfo.title,
