@@ -138,6 +138,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     jobTitle: data.personalInfo.title,
     context
   })
+        credentials: 'include'
 });
 
       if (!response.ok) {
@@ -242,6 +243,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     jobTitle: data.personalInfo.title,
     originalContent
   })
+        credentials: 'include'
 });
 
       if (!response.ok) {
