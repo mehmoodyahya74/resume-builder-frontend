@@ -38,7 +38,9 @@ import {
   Wand2,
   Target,
   Zap as Lightning,
-  Timer
+  Timer,
+  Lock,
+  ShieldCheck
 } from 'lucide-react';
 import { Link } from 'wouter';
 
@@ -46,7 +48,6 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [stats, setStats] = useState({ resumes: 0, users: 0, success: 0 });
   const [activeStep, setActiveStep] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const targetStats = { resumes: 125000, users: 85000, success: 94 };
@@ -72,22 +73,9 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const handleParallax = () => {
-      if (heroRef.current) {
-        const scrolled = window.pageYOffset;
-        const rate = scrolled * -0.5;
-        heroRef.current.style.transform = `translate3d(0, ${rate}px, 0)`;
-      }
-    };
-
-    window.addEventListener('scroll', handleParallax);
-    return () => window.removeEventListener('scroll', handleParallax);
-  }, []);
-
-  useEffect(() => {
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % 4);
-    }, 3000);
+    }, 4000);
     
     return () => clearInterval(interval);
   }, []);
@@ -97,25 +85,25 @@ export default function LandingPage() {
       icon: <FileCode className="h-6 w-6" />,
       title: 'ATS Optimized',
       description: 'Every template passes through Applicant Tracking Systems used by 95% of Fortune 500 companies',
-      color: 'bg-linear-to-br from-blue-500 to-cyan-500',
+      color: 'bg-blue-500',
     },
     {
       icon: <Edit3 className="h-6 w-6" />,
-      title: 'AI-Powered Suggestions',
+      title: 'AI-Powered',
       description: 'Get intelligent recommendations for skills, phrasing, and formatting',
-      color: 'bg-linear-to-br from-purple-500 to-pink-500',
+      color: 'bg-purple-500',
     },
     {
       icon: <Eye className="h-6 w-6" />,
       title: 'Live Preview',
       description: 'See real-time changes as you build. What you see is what you get',
-      color: 'bg-linear-to-br from-green-500 to-emerald-500',
+      color: 'bg-green-500',
     },
     {
       icon: <BarChart3 className="h-6 w-6" />,
-      title: 'Analytics Dashboard',
+      title: 'Analytics',
       description: 'Track resume performance and get insights on improvement areas',
-      color: 'bg-linear-to-br from-orange-500 to-red-500',
+      color: 'bg-orange-500',
     },
   ];
 
@@ -142,48 +130,48 @@ export default function LandingPage() {
       company: 'Apple',
       content: 'From generic to outstanding in 20 minutes. The templates are gorgeous.',
       avatar: 'J',
-      rating: 5,
+      rating: 4,
     },
   ];
 
   const statsCards = [
     { icon: <Users className="h-5 w-5" />, value: `${stats.users.toLocaleString()}+`, label: 'Active Users' },
     { icon: <FileText className="h-5 w-5" />, value: `${stats.resumes.toLocaleString()}+`, label: 'Resumes Created' },
-    { icon: <TrendingUp className="h-5 w-5" />, value: `${stats.success}%`, label: 'Interview Success Rate' },
+    { icon: <TrendingUp className="h-5 w-5" />, value: `${stats.success}%`, label: 'Interview Success' },
     { icon: <Globe className="h-5 w-5" />, value: '150+', label: 'Countries' },
   ];
 
   const processSteps = [
     {
       number: '01',
-      title: 'Choose Your Template',
-      description: 'Select from 50+ professionally designed templates optimized for different industries',
+      title: 'Choose Template',
+      description: 'Select from 50+ professional templates for different industries',
       icon: <FileText className="h-8 w-8" />,
-      color: 'from-blue-500 to-cyan-500',
+      color: 'bg-blue-500',
       time: '1 min',
     },
     {
       number: '02',
       title: 'AI-Powered Fill',
-      description: 'Our AI analyzes your profile and suggests optimal content for each section',
+      description: 'Our AI analyzes your profile and suggests optimal content',
       icon: <Wand2 className="h-8 w-8" />,
-      color: 'from-purple-500 to-pink-500',
+      color: 'bg-purple-500',
       time: '3 mins',
     },
     {
       number: '03',
       title: 'ATS Optimization',
-      description: 'Get instant feedback on ATS compatibility and keyword optimization',
+      description: 'Get instant feedback on ATS compatibility and keywords',
       icon: <Target className="h-8 w-8" />,
-      color: 'from-green-500 to-emerald-500',
+      color: 'bg-green-500',
       time: '2 mins',
     },
     {
       number: '04',
       title: 'Download & Apply',
-      description: 'Export in multiple formats (PDF, Word) and start applying immediately',
+      description: 'Export in PDF or Word and start applying immediately',
       icon: <Rocket className="h-8 w-8" />,
-      color: 'from-orange-500 to-red-500',
+      color: 'bg-orange-500',
       time: '1 min',
     },
   ];
@@ -210,183 +198,206 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 via-white to-gray-50">
-      <header className="border-b bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <div className="min-h-screen bg-white">
+      <header className="border-b bg-white sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
-            <div className="flex items-center gap-2 cursor-pointer group">
-              <div className="h-8 w-8 bg-linear-to-br from-gray-900 to-gray-700 text-white flex items-center justify-center font-serif font-bold rounded-lg group-hover:scale-105 transition-transform duration-300 shadow-md">
+            <div className="flex items-center gap-2 cursor-pointer">
+              <div className="h-8 w-8 bg-gray-900 text-white flex items-center justify-center font-bold rounded-lg">
                 R
               </div>
-              <span className="font-serif font-bold text-xl tracking-tight bg-linear-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                Resume<span className="text-gray-400">Builder</span>
+              <span className="font-bold text-xl text-gray-900">
+                Resume<span className="text-gray-600">Builder</span>
               </span>
             </div>
           </Link>
 
-          <div className="flex items-center gap-4">
-            <nav className="hidden lg:flex items-center gap-1">
-              <Link href="/">
-                <Button variant="secondary" className="font-medium">
-                  Home
+          <div className="flex items-center gap-2">
+            <nav className="hidden md:flex items-center gap-1">
+              <Link href="/templates">
+                <Button variant="ghost" className="font-medium hover:bg-gray-100 text-sm">
+                  Templates
                 </Button>
               </Link>
               <Link href="/about">
-                <Button variant="ghost" className="font-medium hover:bg-gray-100">About Us</Button>
+                <Button variant="ghost" className="font-medium hover:bg-gray-100 text-sm">About Us</Button>
               </Link>
               <Link href="/contact">
-                <Button variant="ghost" className="font-medium hover:bg-gray-100">Contact</Button>
+                <Button variant="ghost" className="font-medium hover:bg-gray-100 text-sm">Contact</Button>
               </Link>
               <Link href="/privacy">
-                <Button variant="ghost" className="font-medium hover:bg-gray-100">Privacy</Button>
+                <Button variant="ghost" className="font-medium hover:bg-gray-100 text-sm">Privacy Policy</Button>
               </Link>
             </nav>
 
-            {/* Hidden on mobile, visible on desktop */}
-            <div className="hidden sm:block">
+            {/* Start Free button - hidden on mobile, visible on desktop */}
+            <div className="hidden md:block">
               <Link href="/templates">
-                <Button className="gap-2 bg-linear-to-r from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600 shadow-lg hover:shadow-xl">
+                <Button className="gap-2 bg-gray-900 hover:bg-gray-800 text-sm">
                   <PenLine size={16} />
-                  <span className="hidden sm:inline">Get Started</span>
+                  Start Free
                   <ArrowRight size={16} />
                 </Button>
               </Link>
             </div>
             
-            <div className="sm:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="hover:bg-gray-100"
-              >
-                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </Button>
-            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden hover:bg-gray-100"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </Button>
           </div>
         </div>
 
         {mobileMenuOpen && (
-          <div className="sm:hidden bg-white/95 backdrop-blur-xl border-t shadow-lg animate-in slide-in-from-top-5">
+          <div className="md:hidden bg-white border-t shadow-lg animate-in slide-in-from-top-5">
             <div className="container mx-auto px-4 py-4 space-y-1">
-              {['/', '/about', '/contact', '/privacy'].map((path, idx) => (
-                <Link key={idx} href={path}>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-start font-medium hover:bg-gray-50"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {path === '/' ? 'Home' : 
-                     path === '/about' ? 'About Us' :
-                     path === '/contact' ? 'Contact' : 'Privacy Policy'}
-                  </Button>
-                </Link>
-              ))}
+              <Link href="/templates">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start font-medium hover:bg-gray-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Templates
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start font-medium hover:bg-gray-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  About Us
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start font-medium hover:bg-gray-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Contact
+                </Button>
+              </Link>
+              <Link href="/privacy">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start font-medium hover:bg-gray-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Privacy Policy
+                </Button>
+              </Link>
             </div>
           </div>
         )}
       </header>
 
-      <section className="relative py-8 md:py-10 overflow-hidden" ref={heroRef}>
-        <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-white to-purple-50 opacity-50" />
-        <div className="absolute top-10 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute bottom-10 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000" />
+      <section className="relative py-8 md:py-12">
+        <div className="absolute inset-0 bg-gray-50" />
         
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 items-center gap-12 max-w-6xl mx-auto">
+        <div className="container mx-auto px-4 relative">
+          <div className="grid lg:grid-cols-2 items-center gap-8 max-w-6xl mx-auto">
             <div className="text-center lg:text-left">
-              <Badge className="mb-6 bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 text-white shadow-lg animate-bounce">
+              <Badge className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
                 <Sparkles size={12} className="mr-2" />
                 Trusted by 85,000+ Professionals
               </Badge>
               
-              <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-                <span className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
-                  Land Your Dream Job
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-snug">
+                <span className="block">
+                  Create a Professional
                 </span>
-                <span className="block text-4xl md:text-5xl lg:text-6xl text-gray-600 mt-2">
-                  With A Resume That <span className="text-blue-600">Wins</span>
+                <span className="block text-blue-600">
+                  CV in Minutes
                 </span>
               </h1>
               
-              <p className="text-xl md:text-2xl text-muted-foreground mb-10 leading-relaxed">
-                AI-powered resume builder with professional templates, ATS optimization, and expert guidance.
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                Build an ATS-friendly resume that employers love. Simple, fast, and built for local job markets.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Link href="/templates">
-                  <Button size="lg" className="h-16 px-10 text-lg bg-linear-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 gap-4">
-                    <Rocket size={24} />
-                    Build Your Resume
-                    <ArrowRight size={24} />
+                  <Button size="lg" className="h-14 px-8 text-base bg-gray-900 hover:bg-gray-800 shadow-lg gap-3">
+                    <Rocket size={20} />
+                    Create My CV
+                    <ArrowRight size={20} />
                   </Button>
                 </Link>
+                <Link href="/templates">
+                  <Button size="lg" variant="outline" className="h-14">
+                    View Templates
+                  </Button>
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4 max-w-md">
+                <div className="text-center p-3 bg-white rounded-lg border">
+                  <div className="text-xl font-bold text-gray-900">94%</div>
+                  <div className="text-xs text-gray-600">Success Rate</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg border">
+                  <div className="text-xl font-bold text-gray-900">7 min</div>
+                  <div className="text-xs text-gray-600">Average Time</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg border">
+                  <div className="text-xl font-bold text-gray-900">50+</div>
+                  <div className="text-xs text-gray-600">Templates</div>
+                </div>
               </div>
             </div>
 
             <div className="relative">
-              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-500 border border-gray-200">
-                <div className="p-6">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="h-16 w-16 bg-linear-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                      <Briefcase className="h-8 w-8 text-white" />
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                <div className="p-4 sm:p-6">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="h-12 w-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                      <Briefcase className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">Alex Morgan</h3>
-                      <p className="text-blue-600 font-medium">Senior Product Manager</p>
-                      <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
+                      <h3 className="font-bold text-gray-900">Alex Morgan</h3>
+                      <p className="text-blue-600 font-medium text-sm">Senior Product Manager</p>
+                      <div className="flex items-center gap-1 text-xs text-gray-600 mt-1">
                         <MapPin className="h-3 w-3" />
                         <span>San Francisco, CA</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     <div>
-                      <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-2 mb-2">
                         <GraduationCap className="h-4 w-4 text-gray-500" />
-                        <h4 className="font-semibold text-gray-900">Education</h4>
+                        <h4 className="font-semibold text-gray-900 text-sm">Education</h4>
                       </div>
                       <div className="pl-6">
-                        <p className="font-medium text-gray-900">Stanford University</p>
-                        <p className="text-sm text-gray-600">MBA, Business Administration</p>
-                        <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
-                          <Calendar className="h-3 w-3" />
-                          <span>2018 - 2020</span>
-                        </div>
+                        <p className="font-medium text-gray-900 text-sm">Stanford University</p>
+                        <p className="text-xs text-gray-600">MBA, Business Administration</p>
                       </div>
                     </div>
 
                     <div>
-                      <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-2 mb-2">
                         <Briefcase className="h-4 w-4 text-gray-500" />
-                        <h4 className="font-semibold text-gray-900">Experience</h4>
+                        <h4 className="font-semibold text-gray-900 text-sm">Experience</h4>
                       </div>
-                      <div className="pl-6 space-y-4">
+                      <div className="pl-6 space-y-3">
                         <div>
-                          <p className="font-medium text-gray-900">Lead Product Manager</p>
-                          <p className="text-sm text-gray-600">Google • Mountain View, CA</p>
-                          <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
-                            <Calendar className="h-3 w-3" />
-                            <span>2021 - Present</span>
-                          </div>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">Product Manager</p>
-                          <p className="text-sm text-gray-600">Facebook • Menlo Park, CA</p>
-                          <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
-                            <Calendar className="h-3 w-3" />
-                            <span>2020 - 2021</span>
-                          </div>
+                          <p className="font-medium text-gray-900 text-sm">Lead Product Manager</p>
+                          <p className="text-xs text-gray-600">Google • Mountain View, CA</p>
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">Skills</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {['Product Strategy', 'User Research', 'Agile Methodologies', 'Data Analysis', 'Team Leadership', 'Go-to-Market'].map((skill, idx) => (
-                          <span key={idx} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+                      <h4 className="font-semibold text-gray-900 text-sm mb-2">Skills</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {['Product Strategy', 'User Research', 'Data Analysis'].map((skill, idx) => (
+                          <span key={idx} className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">
                             {skill}
                           </span>
                         ))}
@@ -395,40 +406,18 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <div className="absolute top-4 right-4">
-                  <Badge className="bg-linear-to-r from-green-500 to-emerald-500 border-0 text-white shadow-lg">
-                    <CheckCircle size={12} className="mr-2" />
-                    ATS Score: 98%
-                  </Badge>
-                </div>
-
-                <div className="absolute -right-6 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-3 shadow-xl border">
-                  <div className="h-12 w-12 bg-linear-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <Award className="h-6 w-6 text-white" />
-                  </div>
-                </div>
-
-                <div className="bg-linear-to-r from-blue-50 to-purple-50 border-t p-4">
+                <div className="bg-gray-50 border-t p-3">
                   <div className="flex items-center justify-between">
-                    <div className="text-sm text-gray-600">Resume created with</div>
-                    <div className="flex items-center gap-1">
-                      <div className="h-5 w-5 bg-linear-to-br from-gray-900 to-gray-700 rounded flex items-center justify-center text-white text-xs font-bold">
+                    <Badge className="bg-green-100 text-green-700 border-green-200">
+                      <CheckCircle size={12} className="mr-1" />
+                      ATS Score: 98%
+                    </Badge>
+                    <div className="flex items-center gap-1 text-xs text-gray-600">
+                      <div className="h-4 w-4 bg-gray-900 rounded flex items-center justify-center text-white text-xs font-bold">
                         R
                       </div>
-                      <span className="font-semibold text-gray-900">ResumeBuilder</span>
+                      <span>ResumeBuilder</span>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-4 shadow-xl border">
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 bg-linear-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-gray-900">94%</div>
-                    <div className="text-sm text-gray-600">Interview Rate</div>
                   </div>
                 </div>
               </div>
@@ -437,218 +426,147 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-10 md:py-20 bg-white">
+      <section className="py-12 md:py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <Badge className="mb-4 bg-linear-to-r from-blue-100 to-blue-50 text-blue-700 border-blue-200">
-              <Zap size={12} className="mr-2" />
-              Simple 4-Step Process
-            </Badge>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
               Create Your Perfect Resume in <span className="text-blue-600">7 Minutes</span>
             </h2>
-            <p className="text-xl text-muted-foreground">
-              From blank page to interview-ready resume in less time than a coffee break
+            <p className="text-gray-600">
+              From blank page to interview-ready in less time than a coffee break
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto mb-12">
             {processSteps.map((step, index) => (
               <div 
                 key={index}
-                className={`relative p-6 rounded-2xl border-2 transition-all duration-500 transform hover:-translate-y-2 ${
+                className={`relative p-4 rounded-xl border transition-all duration-300 ${
                   activeStep === index 
-                    ? 'border-blue-500 bg-blue-50 shadow-xl' 
-                    : 'border-gray-100 bg-white hover:border-blue-200 hover:shadow-lg'
+                    ? 'border-blue-500 bg-white shadow-md' 
+                    : 'border-gray-200 bg-white'
                 }`}
                 onMouseEnter={() => setActiveStep(index)}
               >
-                <div className={`absolute -top-3 -left-3 h-12 w-12 rounded-xl bg-linear-to-br ${step.color} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
-                  {step.number}
+                <div className={`h-12 w-12 rounded-lg ${step.color} flex items-center justify-center mb-4 text-white`}>
+                  {step.icon}
                 </div>
                 
-                <div className={`h-16 w-16 rounded-xl bg-linear-to-br ${step.color} flex items-center justify-center mb-6 ml-4 transition-transform duration-300 ${
-                  activeStep === index ? 'scale-110' : ''
-                }`}>
-                  <div className="text-white">
-                    {step.icon}
-                  </div>
-                </div>
+                <div className="text-sm font-semibold text-gray-500 mb-1">Step {step.number}</div>
+                <h3 className="font-bold text-gray-900 mb-2">{step.title}</h3>
+                <p className="text-sm text-gray-600 mb-3">{step.description}</p>
                 
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                <p className="text-gray-600 mb-4">{step.description}</p>
-                
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <Clock size={14} />
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                  <div className="flex items-center gap-1 text-xs text-gray-500">
+                    <Clock size={12} />
                     <span>{step.time}</span>
                   </div>
-                  {activeStep === index && (
-                    <div className="h-2 w-8 bg-linear-to-r from-blue-500 to-purple-500 rounded-full animate-pulse" />
-                  )}
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="bg-linear-to-r from-blue-50 to-purple-50 rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-8">
+          <div className="bg-white rounded-2xl p-6 md:p-8 max-w-4xl mx-auto border">
+            <div className="grid md:grid-cols-3 gap-6">
               {benefits.map((benefit, index) => (
                 <div key={index} className="text-center">
-                  <div className="h-14 w-14 bg-linear-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <div className={`h-12 w-12 ${index === 0 ? 'bg-blue-500' : index === 1 ? 'bg-purple-500' : 'bg-green-500'} rounded-lg flex items-center justify-center mx-auto mb-3`}>
                     <div className="text-white">
                       {benefit.icon}
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-gray-900 mb-2">{benefit.stat}</div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{benefit.title}</h4>
+                  <div className="text-xl font-bold text-gray-900 mb-1">{benefit.stat}</div>
+                  <h4 className="font-semibold text-gray-900 mb-1">{benefit.title}</h4>
                   <p className="text-gray-600 text-sm">{benefit.description}</p>
                 </div>
               ))}
             </div>
-            
-            <div className="text-center mt-10">
-              <Link href="/templates">
-                <Button size="lg" className="bg-linear-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 shadow-lg hover:shadow-xl gap-3">
-                  <Timer size={20} />
-                  Start Your 7-Minute Resume
-                  <ArrowRight size={20} />
-                </Button>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-8 md:py-12 bg-linear-to-r from-gray-900 to-gray-800 text-white">
+      <section className="py-8 md:py-12 bg-gray-900 text-white">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {statsCards.map((stat, index) => (
               <div 
                 key={index}
-                className="text-center p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105"
+                className="text-center p-4 bg-white/5 rounded-xl border border-white/10"
               >
-                <div className="flex justify-center mb-4">
-                  <div className="p-3 bg-linear-to-br from-white/20 to-white/10 rounded-full">
+                <div className="flex justify-center mb-3">
+                  <div className="p-2 bg-white/10 rounded-full">
                     {stat.icon}
                   </div>
                 </div>
-                <div className="text-3xl md:text-4xl font-bold mb-2 animate-in fade-in-50">
+                <div className="text-2xl md:text-3xl font-bold mb-1">
                   {stat.value}
                 </div>
-                <div className="text-gray-300">{stat.label}</div>
+                <div className="text-sm text-gray-300">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-10 md:py-20 bg-linear-to-b from-gray-50 to-white">
+      <section className="py-12 md:py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <Badge className="mb-4 bg-linear-to-r from-purple-100 to-purple-50 text-purple-700 border-purple-200">
-              <Zap size={12} className="mr-2" />
-              Advanced Features
-            </Badge>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Why We're <span className="text-purple-600">Different</span>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              Why Choose ResumeBuilder
             </h2>
-            <p className="text-xl text-muted-foreground">
-              Built with cutting-edge technology to give you an unfair advantage
+            <p className="text-gray-600">
+              Built with technology to give you an advantage
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {features.map((feature, index) => (
               <Card 
                 key={index}
-                className="border-0 bg-white shadow-xl hover:shadow-2xl transition-all duration-500 group hover:-translate-y-2"
+                className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow"
               >
-                <CardContent className="p-8">
-                  <div className={`w-14 h-14 rounded-2xl ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <div className="text-white">
-                      {feature.icon}
-                    </div>
+                <CardContent className="p-6">
+                  <div className={`w-12 h-12 rounded-lg ${feature.color} flex items-center justify-center mb-4 text-white`}>
+                    {feature.icon}
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-gray-900 mb-4">
+                  <h3 className="font-bold text-gray-900 mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 text-sm">
                     {feature.description}
                   </p>
-                  <div className="mt-6 pt-6 border-t border-gray-100">
-                    <Button variant="ghost" className="p-0 h-auto text-blue-600 hover:text-blue-700 group-hover:translate-x-2 transition-transform duration-300">
-                      Learn more
-                      <ArrowRight size={16} className="ml-2" />
-                    </Button>
-                  </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-
-          <div className="mt-20 bg-linear-to-r from-gray-900 to-gray-800 rounded-3xl overflow-hidden">
-            <div className="grid lg:grid-cols-2 items-center">
-              <div className="p-12 lg:p-16">
-                <Badge className="mb-4 bg-white/20 text-white border-white/30">
-                  <Shield size={12} className="mr-2" />
-                  Privacy First
-                </Badge>
-                <h3 className="font-serif text-3xl md:text-4xl font-bold text-white mb-6">
-                  Your Data Stays <span className="text-blue-300">Yours</span>
-                </h3>
-                <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-                  Unlike other builders, we process everything locally in your browser. 
-                  Your sensitive information never touches our servers unless you choose to save it.
-                </p>
-                <div className="space-y-4">
-                  {['Military-grade encryption', 'GDPR & CCPA compliant', 'Zero data selling', 'Automatic data deletion'].map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-3">
-                      <CheckCircle size={20} className="text-green-400" />
-                      <span className="text-gray-200">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="relative h-64 lg:h-full min-h-100 bg-linear-to-br from-blue-900/20 to-purple-900/20">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-48 h-48 bg-linear-to-br from-blue-500/20 to-purple-500/20 rounded-full animate-pulse" />
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
-      <section className="py-10 md:py-20 bg-white">
+      <section className="py-12 md:py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <Badge className="mb-4 bg-linear-to-r from-green-100 to-green-50 text-green-700 border-green-200">
-              <Users size={12} className="mr-2" />
-              Success Stories
-            </Badge>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Trusted by <span className="text-green-600">Top Talent</span>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              Trusted by Professionals
             </h2>
-            <p className="text-xl text-muted-foreground">
-              See what professionals from leading companies are saying
+            <p className="text-gray-600">
+              See what professionals from leading companies say
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {testimonials.map((testimonial, index) => (
               <Card 
                 key={index}
-                className="border-2 border-gray-100 hover:border-blue-200 hover:shadow-2xl transition-all duration-500 group"
+                className="border border-gray-200 bg-white"
               >
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-14 h-14 bg-linear-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                       {testimonial.avatar}
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
-                      <p className="text-sm text-gray-600">{testimonial.role} at {testimonial.company}</p>
+                      <p className="text-sm text-gray-600">{testimonial.role}</p>
                     </div>
                   </div>
                   <div className="flex mb-4">
@@ -656,13 +574,9 @@ export default function LandingPage() {
                       <Star key={i} size={16} className="text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <p className="text-gray-700 italic mb-6">"{testimonial.content}"</p>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <span>1 week ago</span>
-                    <div className="flex gap-2">
-                      <Linkedin size={16} className="hover:text-blue-600 cursor-pointer" />
-                      <Twitter size={16} className="hover:text-blue-400 cursor-pointer" />
-                    </div>
+                  <p className="text-gray-700 text-sm mb-4">"{testimonial.content}"</p>
+                  <div className="text-sm text-gray-500">
+                    {testimonial.company}
                   </div>
                 </CardContent>
               </Card>
@@ -671,49 +585,69 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-10 md:py-20 bg-linear-to-br from-gray-900 via-gray-800 to-gray-900">
+      <section className="py-12 md:py-16 bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-              <Rocket size={12} className="mr-2" />
-              Ready to Transform Your Career?
+          <div className="max-w-3xl mx-auto text-center">
+            <Badge className="mb-6 bg-white/10 text-white border-white/20">
+              <ShieldCheck size={12} className="mr-2" />
+              Secure & Trusted
             </Badge>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8">
-              Build the Resume That <span className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Gets You Hired</span>
+            <h2 className="text-2xl md:text-4xl font-bold text-white mb-6">
+              Ready to Transform Your Career?
             </h2>
-            <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">
-              Join thousands of successful professionals. Create your winning resume in minutes.
+            <p className="text-lg text-gray-300 mb-8">
+              Join thousands who got interviews with our AI-optimized resumes
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/templates">
-                <Button size="lg" className="h-16 px-12 text-lg bg-linear-to-r from-white to-gray-100 text-gray-900 hover:from-gray-100 hover:to-gray-200 shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300">
-                  <Sparkles size={24} className="mr-3" />
-                  Start Building Resume
-                  <ArrowRight size={24} className="ml-3" />
+                <Button size="lg" className="h-14 px-8 bg-white text-gray-900 hover:bg-gray-100 gap-3">
+                  <Sparkles size={20} />
+                  Start Building Free
+                  <ArrowRight size={20} />
                 </Button>
               </Link>
+              <Link href="/templates">
+                <Button size="lg" variant="outline" className="h-14 border-white text-white hover:bg-white/10">
+                  View All Templates
+                </Button>
+              </Link>
+            </div>
+
+            <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+              <div className="flex items-center gap-2">
+                <Lock size={12} />
+                <span>SSL Secured</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Shield size={12} />
+                <span>GDPR Compliant</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle size={12} />
+                <span>No Credit Card Required</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="bg-gray-900 text-white pt-10 md:pt-16 pb-8">
+      <footer className="bg-gray-900 text-white pt-8 md:pt-12 pb-8">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             <div className="lg:col-span-2">
               <div className="flex items-center gap-3 mb-6">
-                <div className="h-10 w-10 bg-linear-to-br from-white to-gray-200 text-gray-900 flex items-center justify-center font-serif font-bold rounded-lg">
+                <div className="h-10 w-10 bg-white text-gray-900 flex items-center justify-center font-bold rounded-lg">
                   R
                 </div>
                 <div>
-                  <span className="font-serif font-bold text-2xl tracking-tight">Resume<span className="text-gray-400">Builder</span></span>
+                  <span className="font-bold text-2xl">Resume<span className="text-gray-400">Builder</span></span>
                 </div>
               </div>
-              <p className="text-gray-400 mb-8 max-w-md leading-relaxed">
+              <p className="text-gray-400 mb-6 max-w-md">
                 The world's most advanced resume builder. Helping professionals land dream jobs since 2020.
               </p>
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 <Button variant="outline" size="icon" className="border-gray-700 hover:border-gray-600 hover:bg-gray-800">
                   <Twitter size={18} />
                 </Button>
@@ -727,15 +661,15 @@ export default function LandingPage() {
             </div>
             
             <div>
-              <h3 className="font-semibold text-lg mb-6">Company</h3>
-              <div className="space-y-3">
+              <h3 className="font-semibold mb-4">Company</h3>
+              <div className="space-y-2">
                 <Link href="/about">
-                  <Button variant="link" className="text-gray-400 hover:text-white p-0 h-auto text-left w-full justify-start">
+                  <Button variant="link" className="text-gray-400 hover:text-white p-0 h-auto text-left block">
                     About Us
                   </Button>
                 </Link>
                 <Link href="/contact">
-                  <Button variant="link" className="text-gray-400 hover:text-white p-0 h-auto text-left w-full justify-start">
+                  <Button variant="link" className="text-gray-400 hover:text-white p-0 h-auto text-left block mt-2">
                     Contact
                   </Button>
                 </Link>
@@ -743,10 +677,10 @@ export default function LandingPage() {
             </div>
             
             <div>
-              <h3 className="font-semibold text-lg mb-6">Legal</h3>
-              <div className="space-y-3">
+              <h3 className="font-semibold mb-4">Legal</h3>
+              <div className="space-y-2">
                 <Link href="privacy">
-                  <Button variant="link" className="text-gray-400 hover:text-white p-0 h-auto text-left w-full justify-start">
+                  <Button variant="link" className="text-gray-400 hover:text-white p-0 h-auto text-left">
                     Privacy Policy
                   </Button>
                 </Link>
@@ -754,10 +688,13 @@ export default function LandingPage() {
             </div>
           </div>
           
-          <div className="border-t border-gray-800 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="border-t border-gray-800 pt-6">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-gray-500 text-sm">
-                © 2024 ResumeBuilder. All rights reserved. Made with <Heart size={12} className="inline text-red-500" /> for job seekers worldwide.
+                © 2024 ResumeBuilder. All rights reserved.
+              </div>
+              <div className="flex items-center gap-4 text-sm text-gray-500">
+                <span>Made with <Heart size={12} className="inline text-red-500" /> for job seekers</span>
               </div>
             </div>
           </div>
