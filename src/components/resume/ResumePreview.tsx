@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResumeData } from '@/lib/types';
-// REMOVED: import { MultiPageTemplate } from './MultiPageTemplate'; // This doesn't exist
+import { MultiPageTemplate } from './MultiPageTemplate';
 
 interface ResumePreviewProps {
   data: ResumeData;
@@ -15,14 +15,13 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
       className="w-full overflow-hidden bg-white"
       style={{ 
         width: '210mm', 
-        minHeight: '297mm', // CHANGED: Fixed single page height
+        minHeight: `${data.pages.length * 297}mm`,
         margin: '0 auto',
         transform: `scale(${scale})`,
         transformOrigin: 'top center'
       }}
     >
-      {/* You need to add your actual template rendering here */}
-      {/* Example: <Template1 data={data} /> or similar based on templateId */}
+      <MultiPageTemplate data={data} templateId={templateId} />
     </div>
   );
 });
