@@ -19,27 +19,21 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
   
   // Render the correct template based on templateId
   const renderTemplate = () => {
-    // Always use the first page only (single page mode)
-    const singlePageData = {
-      ...data,
-      pages: data.pages.length > 0 ? [data.pages[0]] : data.pages
-    };
-
     switch(templateId) {
       case 'template2':
-        return <Template2 data={singlePageData} />;
+        return <Template2 data={data} />;
       case 'template3':
-        return <Template3 data={singlePageData} />;
+        return <Template3 data={data} />;
       case 'template4':
-        return <Template4 data={singlePageData} />;
+        return <Template4 data={data} />;
       case 'template5':
-        return <Template5 data={singlePageData} />;
+        return <Template5 data={data} />;
       case 'template7':
-        return <Template7 data={singlePageData} />;
+        return <Template7 data={data} />;
       case 'template8':
-        return <Template8 data={singlePageData} />;
+        return <Template8 data={data} />;
       default:
-        return <Template2 data={singlePageData} />;
+        return <Template2 data={data} />;
     }
   };
 
