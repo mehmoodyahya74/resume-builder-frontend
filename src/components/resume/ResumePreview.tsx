@@ -1,6 +1,5 @@
 import React from 'react';
 import { ResumeData } from '@/lib/types';
-import { MultiPageTemplate } from './MultiPageTemplate';
 
 interface ResumePreviewProps {
   data: ResumeData;
