@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PageManager } from './PageManager';
+// REMOVED: PageManager import
 import { MonthYearPicker } from './MonthYearPicker';
 
 interface ResumeFormProps {
@@ -101,7 +101,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
   const [aiKeyStrengths, setAiKeyStrengths] = useState('');
   const [aiResponsibilities, setAiResponsibilities] = useState('');
   const [aiIndustry, setAiIndustry] = useState('Technology');
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  // REMOVED: currentPageIndex state and setCurrentPageIndex
   const [paragraphMode, setParagraphMode] = useState<'bullets' | 'paragraph'>('bullets');
   const [emailTouched, setEmailTouched] = useState(false);
   
@@ -109,7 +109,8 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
   const supportsImage = templatesWithImages.includes(templateId);
   const noImageTemplates = ['template7','template8'];
 
-  const currentPage = data.pages[currentPageIndex];
+  // REMOVED: Multi-page logic - always use the first (and only) page
+  const currentPage = data.pages[0]; // Changed from data.pages[currentPageIndex]
 
   const checkProfessionalTitle = (): boolean => {
     if (!data.personalInfo.title?.trim()) {
@@ -131,14 +132,14 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     setIsGenerating(true);
     try {
       const response = await fetch('https://resume-ai-vercel.vercel.app/api/generate-resume', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    type,
-    jobTitle: data.personalInfo.title,
-    context
-  }),
-});
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type,
+          jobTitle: data.personalInfo.title,
+          context
+        }),
+      });
 
       if (!response.ok) {
         const error = await response.json();
@@ -149,7 +150,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
       
       if (type === 'summary' && result.content[0]) {
         const newPages = [...data.pages];
-        newPages[currentPageIndex] = {
+        newPages[0] = { // Changed index from currentPageIndex to 0
           ...currentPage,
           summary: result.content[0]
         };
@@ -169,7 +170,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
             ...newExperiences[experienceIndex],
             description: result.content.join('\n')
           };
-          newPages[currentPageIndex] = {
+          newPages[0] = { // Changed index from currentPageIndex to 0
             ...currentPage,
             experience: newExperiences
           };
@@ -189,7 +190,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
             description: result.content.join('\n')
           };
           const newPages = [...data.pages];
-          newPages[currentPageIndex] = {
+          newPages[0] = { // Changed index from currentPageIndex to 0
             ...currentPage,
             experience: [...currentPage.experience, newExperience]
           };
@@ -203,7 +204,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
       
       if (type === 'skills' && result.content.length > 0) {
         const newPages = [...data.pages];
-        newPages[currentPageIndex] = {
+        newPages[0] = { // Changed index from currentPageIndex to 0
           ...currentPage,
           skills: result.content
         };
@@ -235,14 +236,14 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     setIsGenerating(true);
     try {
       const response = await fetch('resume-ai-vercel.vercel.app/api/enhance-resume', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    type,
-    jobTitle: data.personalInfo.title,
-    originalContent
-  }),
-});
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type,
+          jobTitle: data.personalInfo.title,
+          originalContent
+        }),
+      });
 
       if (!response.ok) {
         const error = await response.json();
@@ -253,7 +254,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
       
       if (type === 'summary' && result.content[0]) {
         const newPages = [...data.pages];
-        newPages[currentPageIndex] = {
+        newPages[0] = { // Changed index from currentPageIndex to 0
           ...currentPage,
           summary: result.content[0]
         };
@@ -272,7 +273,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
           description: result.content.join('\n')
         };
         const newPages = [...data.pages];
-        newPages[currentPageIndex] = {
+        newPages[0] = { // Changed index from currentPageIndex to 0
           ...currentPage,
           experience: updatedExperiences
         };
@@ -389,7 +390,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
 
   const handlePageDataChange = (field: keyof typeof currentPage, value: any) => {
     const newPages = [...data.pages];
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       [field]: value
     };
@@ -400,7 +401,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     const newPages = [...data.pages];
     const currentSection = [...currentPage[section]];
     (currentSection[index] as any)[field] = value;
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       [section]: currentSection
     };
@@ -413,7 +414,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
       : { id: uuidv4(), company: '', position: '', startDate: '', endDate: '', description: '' };
     
     const newPages = [...data.pages];
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       [section]: [...currentPage[section], newItem]
     };
@@ -424,7 +425,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     const newPages = [...data.pages];
     const newArray = [...currentPage[section]];
     newArray.splice(index, 1);
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       [section]: newArray
     };
@@ -435,7 +436,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     const newPages = [...data.pages];
     const newSkills = [...currentPage.skills];
     newSkills[index] = value;
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       skills: newSkills
     };
@@ -444,7 +445,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
 
   const addSkill = () => {
     const newPages = [...data.pages];
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       skills: [...currentPage.skills, '']
     };
@@ -455,7 +456,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     const newPages = [...data.pages];
     const newSkills = [...currentPage.skills];
     newSkills.splice(index, 1);
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       skills: newSkills
     };
@@ -499,7 +500,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
       items: []
     };
     const newPages = [...data.pages];
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       customSections: [...currentPage.customSections, newSection]
     };
@@ -510,7 +511,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     const newPages = [...data.pages];
     const newSections = [...currentPage.customSections];
     newSections[index] = updatedSection;
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       customSections: newSections
     };
@@ -521,7 +522,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
     const newPages = [...data.pages];
     const newSections = [...currentPage.customSections];
     newSections.splice(index, 1);
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       customSections: newSections
     };
@@ -602,7 +603,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
       endDate: newEndDate
     };
     
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       experience: newExperiences
     };
@@ -624,7 +625,7 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
       endDate: newEndDate
     };
     
-    newPages[currentPageIndex] = {
+    newPages[0] = { // Changed index from currentPageIndex to 0
       ...currentPage,
       education: newEducation
     };
@@ -651,6 +652,8 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
 
   return (
     <div className="space-y-6 pb-20">
+      {/* REMOVED: PageManager component entirely */}
+      
       <SimpleCenteredModal
         open={typeof aiDialogOpen === 'object' ? aiDialogOpen.open : aiDialogOpen}
         onClose={() => {
@@ -737,13 +740,6 @@ export function ResumeForm({ data, onChange, templateId = 'template2' }: ResumeF
           </Button>
         </div>
       </SimpleCenteredModal>
-
-      <PageManager
-        data={data}
-        currentPageIndex={currentPageIndex}
-        onChange={onChange}
-        onPageChange={setCurrentPageIndex}
-      />
 
       <Accordion type="single" collapsible className="w-full" defaultValue="personal">
         <AccordionItem value="personal">
