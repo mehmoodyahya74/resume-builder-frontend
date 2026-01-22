@@ -15,14 +15,12 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
       className="w-full overflow-hidden bg-white"
       style={{ 
         width: '210mm', 
-        minHeight: '297mm', // CHANGED: Fixed single page height
+        minHeight: `${data.pages.length * 297}mm`,
         margin: '0 auto',
         transform: `scale(${scale})`,
         transformOrigin: 'top center'
       }}
     >
-      {/* The MultiPageTemplate component might need to be modified too 
-          to only render the first page, but I'm ONLY changing this file */}
       <MultiPageTemplate data={data} templateId={templateId} />
     </div>
   );
