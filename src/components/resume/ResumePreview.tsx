@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResumeData } from '@/lib/types';
-import { MultiPageTemplate } from './MultiPageTemplate';
+// DELETE THIS: import { MultiPageTemplate } from './MultiPageTemplate';
 
 interface ResumePreviewProps {
   data: ResumeData;
@@ -15,13 +15,14 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
       className="w-full overflow-hidden bg-white"
       style={{ 
         width: '210mm', 
-        minHeight: `${data.pages.length * 297}mm`,
+        minHeight: '297mm', // Fixed single page height
         margin: '0 auto',
         transform: `scale(${scale})`,
         transformOrigin: 'top center'
       }}
     >
-      <MultiPageTemplate data={data} templateId={templateId} />
+      {/* DELETE THIS: <MultiPageTemplate data={data} templateId={templateId} /> */}
+      {/* ADD YOUR ACTUAL TEMPLATE COMPONENT HERE */}
     </div>
   );
 });
