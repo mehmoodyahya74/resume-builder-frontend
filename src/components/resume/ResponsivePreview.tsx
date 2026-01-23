@@ -14,8 +14,8 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
       if (!containerRef.current) return;
 
       const container = containerRef.current;
-      const containerWidth = container.clientWidth - 20; // Less padding
-      const containerHeight = container.clientHeight - 20;
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
       
       // A4 dimensions in pixels (210mm x 297mm)
       const a4Width = 794;  // 210mm * 3.78px/mm
@@ -28,32 +28,45 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
       // Use the smaller ratio to fit entire page
       const fitRatio = Math.min(widthRatio, heightRatio);
       
-      // Apply additional scale from props if needed
+      // Apply user's zoom level
       const finalScale = fitRatio * scale;
       
-      setDynamicScale(Math.min(finalScale, 1)); // Don't scale beyond original size
+      setDynamicScale(Math.max(0.3, Math.min(finalScale, 1))); // Limit scale between 0.3 and 1
     }
 
     handleResize();
+    
+    // Use ResizeObserver for better performance
+    const resizeObserver = new ResizeObserver(() => {
+      setTimeout(handleResize, 50); // Small delay to ensure accurate measurements
+    });
+    
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+    
     window.addEventListener('resize', handleResize);
     
     return () => {
       window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
     };
   }, [scale]);
 
   return (
     <div
       ref={containerRef}
+      className="responsive-preview-container"
       style={{
         width: '100%',
         height: '100%',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
-        padding: '10px',
-        overflow: 'hidden', // Changed to hidden to prevent scrolling
+        alignItems: 'flex-start',
+        padding: '0',
+        overflow: 'hidden',
         backgroundColor: '#f5f5f5',
+        position: 'relative',
       }}
     >
       <div
@@ -62,8 +75,12 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
           transformOrigin: 'top center',
           width: '210mm',
           minHeight: '297mm',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
           backgroundColor: 'white',
+          margin: '0',
+          boxSizing: 'border-box',
+          position: 'relative',
+          top: '0',
+          left: '0',
         }}
       >
         {children}
