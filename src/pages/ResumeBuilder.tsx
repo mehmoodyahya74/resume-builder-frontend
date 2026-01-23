@@ -367,42 +367,27 @@ console.log('✅ PDF downloaded successfully!');
               <ResumeForm data={resumeData} onChange={setResumeData} />
             </div>
           ) : (
-            <>
-              <div className="flex items-center justify-center px-4 py-3 bg-white border-b gap-4">
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  onClick={handleZoomOut}
-                  disabled={zoomLevel <= 0.4}
-                  className="h-8 w-8"
+            <div className="flex-1 overflow-hidden relative bg-gray-50">
+              {/* Fixed small preview at 35% size */}
+              <div className="h-full w-full flex items-start justify-center p-2">
+                <div
+                  style={{
+                    transform: 'scale(0.35)',
+                    transformOrigin: 'top center',
+                    width: '210mm',
+                    minHeight: '297mm',
+                    margin: '0 auto',
+                  }}
                 >
-                  <ZoomOut size={14} />
-                </Button>
-                
-                <div className="flex items-center gap-2 px-3">
-                  <Maximize size={14} className="text-gray-500" />
-                  <span className="text-sm font-medium min-w-10 text-center">
-                    {Math.round(zoomLevel * 100)}%
-                  </span>
+                  <ResumePreview 
+                    data={resumeData} 
+                    ref={printRef} 
+                    templateId={templateId}
+                    scale={0.35}
+                  />
                 </div>
-                
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  onClick={handleZoomIn}
-                  disabled={zoomLevel >= 1}
-                  className="h-8 w-8"
-                >
-                  <ZoomIn size={14} />
-                </Button>
               </div>
-              
-              <div className="flex-1 overflow-hidden relative">
-                <ResponsivePreview scale={zoomLevel}>
-                  <ResumePreview data={resumeData} ref={printRef} templateId={templateId} />
-                </ResponsivePreview>
-              </div>
-            </>
+            </div>
           )}
         </div>
       </main>
