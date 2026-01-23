@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResumeData, TemplateData } from '@/lib/types';
+
 import { Template2 } from '@/components/templates/Template2/template2';
 import { Template3 } from '@/components/templates/Template3/template3';
 import { Template4 } from '@/components/templates/Template4/template4';
@@ -13,7 +14,8 @@ interface ResumePreviewProps {
   templateId?: string;
 }
 
-export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ data, templateId = 'template2' }, ref) => {
+export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ data, scale = 1, templateId = 'template1' }, ref) => {
+  const pageCount = data.pages?.length || 1;
   
   const getTemplateData = (): TemplateData => {
     const page = data.pages && data.pages.length > 0 ? data.pages[0] : {
@@ -63,18 +65,36 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
     }
   };
 
+  const contentWidthMM = 210;
+  const contentHeightMM = pageCount * 297;
+  
+  const contentWidthPx = contentWidthMM * 3.7795275591;
+  const contentHeightPx = contentHeightMM * 3.7795275591;
+  
+  const scaledWidth = contentWidthPx * scale;
+  const scaledHeight = contentHeightPx * scale;
+
   return (
     <div 
-      ref={ref}
-      className="bg-white"
-      style={{
-  width: '100%',
-  maxWidth: '210mm',
-  minHeight: '297mm',
-}}
-
+      style={{ 
+        width: `${scaledWidth}px`,
+        height: `${scaledHeight}px`,
+        margin: '0 auto',
+        overflow: 'visible'
+      }}
     >
-      {renderTemplate()}
+      <div 
+        ref={ref}
+        className="bg-white"
+        style={{ 
+          width: `${contentWidthMM}mm`, 
+          minHeight: `${contentHeightMM}mm`,
+          transform: `scale(${scale})`,
+          transformOrigin: 'top left'
+        }}
+      >
+        {renderTemplate()}
+      </div>
     </div>
   );
 });
