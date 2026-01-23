@@ -7,45 +7,58 @@ interface ResponsivePreviewProps {
 
 export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [dynamicScale, setDynamicScale] = useState(scale);
 
   useEffect(() => {
     function handleResize() {
-      if (!containerRef.current) return;
+      if (!containerRef.current || !contentRef.current) return;
 
       const container = containerRef.current;
-      const containerWidth = container.clientWidth;
-      const containerHeight = container.clientHeight;
+      const content = contentRef.current;
       
-      // A4 dimensions in pixels (210mm x 297mm)
-      const a4Width = 794;  // 210mm * 3.78px/mm
-      const a4Height = 1123; // 297mm * 3.78px/mm
+      const containerWidth = container.clientWidth - 40; // Less padding
+      const containerHeight = container.clientHeight - 40;
+      
+      // Get the actual content dimensions
+      content.style.transform = 'scale(1)'; // Reset to get actual size
+      const contentWidth = content.scrollWidth;
+      const contentHeight = content.scrollHeight;
+      content.style.transform = `scale(${dynamicScale})`; // Restore
+      
+      console.log('Container:', containerWidth, containerHeight);
+      console.log('Content:', contentWidth, contentHeight);
       
       // Calculate scale to fit both width and height
-      const widthRatio = containerWidth / a4Width;
-      const heightRatio = containerHeight / a4Height;
+      const widthRatio = containerWidth / contentWidth;
+      const heightRatio = containerHeight / contentHeight;
       
-      // Use the smaller ratio to fit entire page
+      // Use the SMALLER ratio to fit everything
       const fitRatio = Math.min(widthRatio, heightRatio);
       
       // Apply user's zoom level
-      const finalScale = fitRatio * scale;
+      const finalScale = fitRatio * 0.95 * scale; // 95% for margin
       
-      setDynamicScale(Math.max(0.3, Math.min(finalScale, 1))); // Limit scale between 0.3 and 1
+      // Limit between 0.3 and 1.2
+      const clampedScale = Math.max(0.3, Math.min(finalScale, 1.2));
+      
+      setDynamicScale(clampedScale);
     }
 
-    handleResize();
+    // Initial calculation
+    setTimeout(handleResize, 100);
     
-    // Use ResizeObserver for better performance
+    // Listen for resize
+    window.addEventListener('resize', handleResize);
+    
+    // Use ResizeObserver for container changes
     const resizeObserver = new ResizeObserver(() => {
-      setTimeout(handleResize, 50); // Small delay to ensure accurate measurements
+      setTimeout(handleResize, 50);
     });
     
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
     }
-    
-    window.addEventListener('resize', handleResize);
     
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -56,31 +69,26 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
   return (
     <div
       ref={containerRef}
-      className="responsive-preview-container"
       style={{
         width: '100%',
         height: '100%',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-start',
-        padding: '0',
-        overflow: 'hidden',
+        alignItems: 'flex-start', // Align to top
+        padding: '20px',
+        overflow: 'hidden', // Important: hide scrollbars
         backgroundColor: '#f5f5f5',
-        position: 'relative',
       }}
     >
       <div
+        ref={contentRef}
         style={{
           transform: `scale(${dynamicScale})`,
           transformOrigin: 'top center',
           width: '210mm',
           minHeight: '297mm',
           backgroundColor: 'white',
-          margin: '0',
-          boxSizing: 'border-box',
-          position: 'relative',
-          top: '0',
-          left: '0',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         }}
       >
         {children}
