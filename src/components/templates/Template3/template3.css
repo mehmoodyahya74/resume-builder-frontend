@@ -1,9 +1,8 @@
 /* EXACT styling from your original template */
 .template3-container {
-width: 100%; /* ← Makes template take full container width */
-    min-height: 297mm;
+  width: 210mm;
+  min-height: 297mm;
   background: white;
-  max-width: 794px; /* ← Optional: Limits to A4 width */
   margin: 0 auto;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   overflow: hidden;
