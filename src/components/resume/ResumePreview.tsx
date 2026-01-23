@@ -9,7 +9,7 @@ import { Template8 } from '@/components/templates/Template8/template8';
 
 interface ResumePreviewProps {
   data: ResumeData;
-  scale?: number;
+  scale?: number; // We accept but don't use
   templateId?: string;
 }
 
@@ -66,11 +66,10 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
   return (
     <div 
       ref={ref}
-      className="w-full overflow-hidden bg-white"
+      className="bg-white"
       style={{ 
         width: '210mm', 
         minHeight: '297mm',
-        margin: '0 auto',
       }}
     >
       {renderTemplate()}
