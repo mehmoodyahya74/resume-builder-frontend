@@ -37,7 +37,7 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
     <div
       ref={containerRef}
       style={{
-        width: '10%',
+        width: '200%',
         height: '100%',
         overflow: 'hidden',
         display: 'flex',
