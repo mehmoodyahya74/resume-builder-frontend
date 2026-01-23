@@ -1,98 +1,105 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
+import { ResumeData, TemplateData } from '@/lib/types';
 
-interface ResponsivePreviewProps {
-  children: React.ReactNode;
+// Import your actual templates
+import { Template2 } from '@/components/templates/Template2/template2';
+import { Template3 } from '@/components/templates/Template3/template3';
+import { Template4 } from '@/components/templates/Template4/template4';
+import { Template5 } from '@/components/templates/Template5/template5';
+import { Template7 } from '@/components/templates/Template7/template7';
+import { Template8 } from '@/components/templates/Template8/template8';
+
+interface ResumePreviewProps {
+  data: ResumeData;
   scale?: number;
+  templateId?: string;
 }
 
-export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [dynamicScale, setDynamicScale] = useState(scale);
-
-  useEffect(() => {
-    function handleResize() {
-      if (!containerRef.current || !contentRef.current) return;
-
-      const container = containerRef.current;
-      const content = contentRef.current;
-      
-      const containerWidth = container.clientWidth - 40; // Less padding
-      const containerHeight = container.clientHeight - 40;
-      
-      // Get the actual content dimensions
-      content.style.transform = 'scale(1)'; // Reset to get actual size
-      const contentWidth = content.scrollWidth;
-      const contentHeight = content.scrollHeight;
-      content.style.transform = `scale(${dynamicScale})`; // Restore
-      
-      console.log('Container:', containerWidth, containerHeight);
-      console.log('Content:', contentWidth, contentHeight);
-      
-      // Calculate scale to fit both width and height
-      const widthRatio = containerWidth / contentWidth;
-      const heightRatio = containerHeight / contentHeight;
-      
-      // Use the SMALLER ratio to fit everything
-      const fitRatio = Math.min(widthRatio, heightRatio);
-      
-      // Apply user's zoom level
-      const finalScale = fitRatio * 0.95 * scale; // 95% for margin
-      
-      // Limit between 0.3 and 1.2
-      const clampedScale = Math.max(0.3, Math.min(finalScale, 1.2));
-      
-      setDynamicScale(clampedScale);
-    }
-
-    // Initial calculation
-    setTimeout(handleResize, 100);
-    
-    // Listen for resize
-    window.addEventListener('resize', handleResize);
-    
-    // Use ResizeObserver for container changes
-    const resizeObserver = new ResizeObserver(() => {
-      setTimeout(handleResize, 50);
-    });
-    
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      resizeObserver.disconnect();
+export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ data, scale = 1, templateId = 'template2' }, ref) => {
+  
+  // Convert ResumeData (multi-page) to TemplateData (single page)
+  const getTemplateData = (): TemplateData => {
+    // Get the first page or use defaults
+    const page = data.pages && data.pages.length > 0 ? data.pages[0] : {
+      summary: '',
+      experience: [],
+      education: [],
+      skills: [],
+      customSections: [],
     };
-  }, [scale]);
+    
+    return {
+      personalInfo: data.personalInfo || {
+        fullName: '',
+        title: '',
+        email: '',
+        phone: '',
+        location: '',
+        website: '',
+        imageUrl: undefined
+      },
+      summary: page.summary || '',
+      experience: page.experience || [],
+      education: page.education || [],
+      skills: page.skills || [],
+      customSections: page.customSections || [],
+    };
+  };
+
+  const templateData = getTemplateData();
+
+  // Render the correct template based on templateId
+  const renderTemplate = () => {
+    switch(templateId) {
+      case 'template2':
+        return <Template2 data={templateData} />;
+      case 'template3':
+        return <Template3 data={templateData} />;
+      case 'template4':
+        return <Template4 data={templateData} />;
+      case 'template5':
+        return <Template5 data={templateData} />;
+      case 'template7':
+        return <Template7 data={templateData} />;
+      case 'template8':
+        return <Template8 data={templateData} />;
+      default:
+        return <Template2 data={templateData} />;
+    }
+  };
+
+  const contentWidthMM = 210;
+  const contentHeightMM = 297;
+  
+  const contentWidthPx = contentWidthMM * 3.7795275591;
+  const contentHeightPx = contentHeightMM * 3.7795275591;
+  
+  const scaledWidth = contentWidthPx * scale;
+  const scaledHeight = contentHeightPx * scale;
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start', // Align to top
-        padding: '20px',
-        overflow: 'hidden', // Important: hide scrollbars
-        backgroundColor: '#f5f5f5',
+    <div 
+      style={{ 
+        width: `${scaledWidth}px`,
+        height: `${scaledHeight}px`,
+        margin: '0 auto',
+        overflow: 'visible'
       }}
     >
-      <div
-        ref={contentRef}
-        style={{
-          transform: `scale(${dynamicScale})`,
-          transformOrigin: 'top center',
-          width: '210mm',
-          minHeight: '297mm',
-          backgroundColor: 'white',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      <div 
+        ref={ref}
+        className="bg-white"
+        style={{ 
+          width: `${contentWidthMM}mm`, 
+          minHeight: `${contentHeightMM}mm`,
+          transform: `scale(${scale})`,
+          transformOrigin: 'top left'
         }}
       >
-        {children}
+        {renderTemplate()}
       </div>
     </div>
   );
-}
+});
+
+ResumePreview.displayName = 'ResumePreview';
