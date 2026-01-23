@@ -3,6 +3,7 @@ import { useSearchParams } from 'wouter';
 import { ResumeForm } from '@/components/resume/ResumeForm';
 import { ResumePreview } from '@/components/resume/ResumePreview';
 import { ATSScoreChecker } from '@/components/resume/ATSScoreChecker';
+import { ResponsivePreview } from '@/components/resume/ResponsivePreview';
 import { initialResumeData } from '@/data/initialResume';
 import { ResumeData } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -347,8 +348,10 @@ console.log('✅ PDF downloaded successfully!');
             
             <ResizablePanel defaultSize={60} className="bg-gray-200/50">
               <div className="h-full overflow-y-auto p-8 flex justify-center items-start">
-                <ResumePreview data={resumeData} ref={printRef} scale={1} templateId={templateId} />
-              </div>
+  <ResponsivePreview scale={1}>
+    <ResumePreview data={resumeData} ref={printRef} templateId={templateId} />
+  </ResponsivePreview>
+</div>
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>
@@ -397,8 +400,10 @@ console.log('✅ PDF downloaded successfully!');
               </div>
               
               <div className="flex-1 overflow-auto">
-                <ResumePreview data={resumeData} ref={printRef} scale={zoomLevel} templateId={templateId} />
-              </div>
+  <ResponsivePreview scale={zoomLevel}>
+    <ResumePreview data={resumeData} ref={printRef} templateId={templateId} />
+  </ResponsivePreview>
+</div>
             </>
           )}
         </div>
