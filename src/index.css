@@ -166,11 +166,8 @@ p, span, div, li {
   word-wrap: break-word !important;
   max-width: 100% !important;
 }
-/* --------------------------- */
-/* UNIVERSAL MOBILE RESUME FIX */
-/* --------------------------- */
+/* UNIVERSAL MOBILE SCALING FOR ALL TEMPLATES */
 @media (max-width: 768px) {
-  /* Make all templates full width */
   .template1-container,
   .template2-simple,
   .template2-container,
@@ -184,14 +181,35 @@ p, span, div, li {
   .template7-container,
   .template8-simple,
   .template8-container {
-    width: 100% !important;        /* full width */
-    min-height: auto !important;   /* auto height */
-    margin: 0 !important;          /* remove centering */
-    padding: 10px !important;      /* smaller padding */
+    width: 100% !important;
+    min-height: auto !important;
+    margin: 0 auto !important;
+    padding: 10px !important;
     box-sizing: border-box;
+    transform: scale(0.85);      /* scale down proportionally */
+    transform-origin: top center;
   }
 
-  /* Stack left/right columns vertically */
+  /* Optional: adjust scaling based on very small screens */
+  @media (max-width: 480px) {
+    .template1-container,
+    .template2-simple,
+    .template2-container,
+    .template3-simple,
+    .template3-container,
+    .template4-simple,
+    .template4-container,
+    .template5-simple,
+    .template5-container,
+    .template7-simple,
+    .template7-container,
+    .template8-simple,
+    .template8-container {
+      transform: scale(0.7);
+    }
+  }
+
+  /* Stack columns vertically */
   .template2-content,
   .template3-content,
   .template4-content,
@@ -202,7 +220,6 @@ p, span, div, li {
     gap: 0 !important;
   }
 
-  /* Left/right sections full width */
   .template2-left, .template2-right,
   .template3-left, .template3-right,
   .template4-left, .template4-right,
@@ -212,57 +229,5 @@ p, span, div, li {
     width: 100% !important;
     padding: 0 !important;
     border: none !important;
-  }
-
-  /* Add spacing between stacked sections */
-  .template2-right,
-  .template3-right,
-  .template4-right,
-  .template5-right,
-  .template7-right,
-  .template8-right {
-    margin-top: 20px !important;
-  }
-
-  /* Shrink profile images */
-  .template2-profile-image,
-  .template3-profile-image,
-  .template4-profile-image,
-  .template5-profile-image,
-  .template7-profile-image,
-  .template8-profile-image {
-    width: 120px !important;
-    height: 120px !important;
-    margin: 0 auto 20px auto !important;
-  }
-
-  /* Adjust headings & contact info font size */
-  .template2-name-title h1,
-  .template3-name-title h1,
-  .template4-name-title h1,
-  .template5-name-title h1,
-  .template7-name-title h1,
-  .template8-name-title h1 {
-    font-size: 28px !important;
-  }
-
-  .template2-name-title h2,
-  .template3-name-title h2,
-  .template4-name-title h2,
-  .template5-name-title h2,
-  .template7-name-title h2,
-  .template8-name-title h2 {
-    font-size: 16px !important;
-  }
-
-  .template2-contact,
-  .template3-contact,
-  .template4-contact,
-  .template5-contact,
-  .template7-contact,
-  .template8-contact {
-    font-size: 12px !important;
-    text-align: left !important;
-    margin-top: 10px !important;
   }
 }
