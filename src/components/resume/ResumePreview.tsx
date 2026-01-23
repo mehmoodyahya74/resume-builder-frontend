@@ -16,7 +16,7 @@ interface ResumePreviewProps {
 export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ data, templateId = 'template2' }, ref) => {
   
   const getTemplateData = (): TemplateData => {
-    const page = data.pages && data.pages.length > 0 ? data.pages[0] : {
+    const page = data.pages?.[0] || {
       summary: '',
       experience: [],
       education: [],
@@ -68,11 +68,10 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
       ref={ref}
       className="bg-white"
       style={{
-  width: '100%',
-  maxWidth: '210mm',
-  minHeight: '297mm',
-}}
-
+        width: '100%',
+        maxWidth: '210mm',
+        minHeight: '297mm',
+      }}
     >
       {renderTemplate()}
     </div>
