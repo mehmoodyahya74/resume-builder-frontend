@@ -166,3 +166,14 @@ p, span, div, li {
   word-wrap: break-word !important;
   max-width: 100% !important;
 }
+/* Add to your existing global CSS file */
+@media screen and (max-width: 768px) {
+  .responsive-preview-container {
+    height: calc(100vh - 120px) !important; /* Adjust based on your header/controls height */
+  }
+  
+  [class*="template"] {
+    margin: 0 !important;
+    padding: 20px !important;
+  }
+}
