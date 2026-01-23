@@ -2,43 +2,40 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface ResponsivePreviewProps {
   children: React.ReactNode;
-  baseWidth?: number; // width of CV in px (A4 ≈ 794)
 }
 
-export function ResponsivePreview({
-  children,
-  baseWidth = 794,
-}: ResponsivePreviewProps) {
+export function ResponsivePreview({ children }: ResponsivePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
-    const updateScale = () => {
+    const handleResize = () => {
       if (!containerRef.current) return;
 
-      const containerWidth = containerRef.current.clientWidth;
+      const containerWidth = containerRef.current.offsetWidth;
+      const A4_WIDTH = 794; // px (standard resume width)
 
-      // Fit CV fully into screen
-      const newScale = containerWidth < baseWidth
-        ? containerWidth / baseWidth
-        : 1;
+      const newScale =
+        containerWidth < A4_WIDTH
+          ? containerWidth / A4_WIDTH
+          : 1;
 
       setScale(newScale);
     };
 
-    updateScale();
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
-  }, [baseWidth]);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div
       ref={containerRef}
-      className="w-full h-full flex justify-center items-start overflow-hidden p-2"
+      className="w-full h-full overflow-x-hidden flex justify-center"
     >
       <div
         style={{
-          width: baseWidth,
+          width: '794px',
           transform: `scale(${scale})`,
           transformOrigin: 'top center',
         }}
