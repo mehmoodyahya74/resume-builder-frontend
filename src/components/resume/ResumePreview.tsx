@@ -74,7 +74,7 @@ return (
     ref={ref}
     className="bg-white"
     style={{ 
-      width: `${210 * scale}mm`,  // Scale width directly
+      width: `${310 * scale}mm`,  // Scale width directly
       minHeight: `${297 * scale}mm`, // Scale height directly
       margin: '0 auto',
       transform: 'none', // Remove transform: scale()
