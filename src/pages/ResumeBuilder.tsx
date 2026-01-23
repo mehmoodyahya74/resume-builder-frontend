@@ -15,26 +15,35 @@ import {
   Maximize2,
   CheckCircle2,
   Menu,
-  X,
   Smartphone,
-  Monitor
+  Monitor,
+  ChevronRight,
+  ChevronLeft,
+  Sparkles,
+  Brain,
+  User,
+  Briefcase,
+  GraduationCap,
+  Award,
+  FileText,
+  Settings
 } from 'lucide-react';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { Link } from 'wouter';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function ResumeBuilder() {
   const [params] = useSearchParams();
-  const templateId = params.get('template') || 'template1';
+  const templateId = params.get('template') || 'template2';
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [activeMobileTab, setActiveMobileTab] = useState<'edit' | 'preview' | 'ats'>('edit');
   const [zoomLevel, setZoomLevel] = useState(0.7);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [deviceOrientation, setDeviceOrientation] = useState<'portrait' | 'landscape'>('portrait');
+  const [showMobileTips, setShowMobileTips] = useState(true);
   const printRef = useRef<HTMLDivElement>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
@@ -59,7 +68,241 @@ export default function ResumeBuilder() {
     return () => window.removeEventListener('resize', checkOrientation);
   }, []);
 
-  // ... (keep all your existing functions: escapeRegExp, handleDownloadPDF)
+  // Hide mobile tips after 5 seconds
+  useEffect(() => {
+    if (showMobileTips) {
+      const timer = setTimeout(() => {
+        setShowMobileTips(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showMobileTips]);
+
+  function escapeRegExp(string: string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  const handleDownloadPDF = async () => {
+    const element = printRef.current;
+    if (!element) {
+      alert('Cannot generate PDF. Please try again.');
+      return;
+    }
+    
+    setIsGeneratingPDF(true);
+    
+    try {
+      console.log('🔄 Starting PDF generation...');
+      
+      let htmlContent = element.innerHTML;
+      
+      const imgTags = htmlContent.match(/<img[^>]+src="([^">]+)"/g) || [];
+      console.log('Found img tags:', imgTags.length);
+      
+      const imageSrcs = new Set<string>();
+      imgTags.forEach(tag => {
+        const match = tag.match(/src="([^"]+)"/);
+        if (match && match[1]) {
+          const src = match[1];
+          
+          if (!src.startsWith('data:image/')) {
+            imageSrcs.add(src);
+          }
+        }
+      });
+      
+      console.log('Images to convert:', Array.from(imageSrcs));
+      
+      const imageConversionPromises = Array.from(imageSrcs).map(async (src) => {
+        try {
+          if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('data:')) {
+            return { original: src, base64: src };
+          }
+          
+          let imageUrl = src;
+          if (src.startsWith('/')) {
+            imageUrl = window.location.origin + src;
+          } else if (src.startsWith('./')) {
+            imageUrl = window.location.origin + src.substring(1);
+          }
+          
+          console.log(`Converting: ${src} -> ${imageUrl}`);
+          
+          const response = await fetch(imageUrl);
+          if (!response.ok) {
+            console.warn(`Failed to fetch ${imageUrl}: ${response.status}`);
+            return { original: src, base64: src };
+          }
+          
+          const blob = await response.blob();
+          const base64 = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = () => reject(new Error('Failed to convert image'));
+            reader.readAsDataURL(blob);
+          });
+          
+          return { original: src, base64 };
+          
+        } catch (error) {
+          console.warn(`Failed to convert image ${src}:`, error);
+          return { original: src, base64: src };
+        }
+      });
+      
+      const convertedImages = await Promise.all(imageConversionPromises);
+      
+      convertedImages.forEach(({ original, base64 }) => {
+        if (original !== base64) {
+          const escapedOriginal = escapeRegExp(original);
+          htmlContent = htmlContent.replace(
+            new RegExp(`src=["']${escapedOriginal}["']`, 'g'),
+            `src="${base64}"`
+          );
+        }
+      });
+      
+      const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+        .map(style => {
+          if (style.tagName === 'STYLE') {
+            return `<style>${style.innerHTML}</style>`;
+          } else {
+            const href = style.getAttribute('href');
+            if (!href) return '';
+            
+            if (href.startsWith('/')) {
+              return `<link rel="stylesheet" href="${window.location.origin}${href}" />`;
+            } else if (href.startsWith('http')) {
+              return `<link rel="stylesheet" href="${href}" />`;
+            } else {
+              return `<link rel="stylesheet" href="${window.location.origin}/${href}" />`;
+            }
+          }
+        })
+        .join('');
+    
+      const completeHTML = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${resumeData.personalInfo.fullName} - Resume</title>
+            ${styles}
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap');
+              
+              body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+              
+              .template1-container, .template2-simple {
+                width: 210mm !important;
+                min-height: 297mm !important;
+                box-shadow: none !important;
+                margin: 0 auto !important;
+                page-break-inside: avoid !important;
+              }
+              
+              img {
+                max-width: 100% !important;
+                height: auto !important;
+              }
+              
+              * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+              }
+              
+              .template2-skill {
+                background-color: #e0f2fe !important;
+                color: #0369a1 !important;
+              }
+            </style>
+          </head>
+          <body style="margin: 0; padding: 0; background: white;">
+            ${htmlContent}
+            <base href="${window.location.origin}/">
+          </body>
+        </html>
+      `;
+      
+      const fileName = `${resumeData.personalInfo.fullName.replace(/\s+/g, '_')}_Resume.pdf`;
+      
+      console.log('📦 Sending HTML to AWS Lambda...');
+      console.log('HTML length:', completeHTML.length);
+      
+      // Send to Lambda
+      const response = await fetch(PDF_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          html: completeHTML,
+          fileName: fileName
+        }),
+        mode: 'cors'
+      });
+      
+      if (!response.ok) {
+        // Try to get error message
+        let errorMessage = `Server error: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage += ` - ${errorData.message || errorData.error}`;
+        } catch {
+          // If not JSON, get text
+          const errorText = await response.text();
+          errorMessage += ` - ${errorText}`;
+        }
+        throw new Error(errorMessage);
+      }
+      
+      // Lambda returns PDF directly - just download it
+      console.log('✅ Received response from Lambda, decoding PDF...');
+
+      const data = await response.json();
+
+      // 1️⃣ Decode base64
+      const binary = atob(data.pdf);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+
+      // 2️⃣ Create PDF Blob
+      const pdfBlob = new Blob([bytes], { type: 'application/pdf' });
+
+      // 3️⃣ Download
+      const url = window.URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = data.fileName || fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      console.log('✅ PDF downloaded successfully!');
+      
+    } catch (error) {
+      console.error('❌ PDF generation failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
+      alert(
+        `PDF Generation Failed\n\n` +
+        `Error: ${errorMessage}\n\n` +
+        `1. Check browser console for details\n` +
+        `2. Make sure AWS Lambda is running\n` +
+        `3. Try with simpler resume content`
+      );
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
 
   const handleZoomIn = () => {
     setZoomLevel(prev => Math.min(1, prev + 0.1));
@@ -70,7 +313,7 @@ export default function ResumeBuilder() {
   };
 
   const resetZoom = () => {
-    setZoomLevel(0.7);
+    setZoomLevel(deviceOrientation === 'portrait' ? 0.6 : 0.8);
   };
 
   const toggleFullScreen = () => {
@@ -86,14 +329,6 @@ export default function ResumeBuilder() {
       }
     }
     setIsFullScreen(!isFullScreen);
-  };
-
-  // Calculate optimal zoom for device orientation
-  const getOptimalZoom = () => {
-    if (deviceOrientation === 'portrait') {
-      return 0.6; // More zoomed out for portrait
-    }
-    return 0.8; // More zoomed in for landscape
   };
 
   // Mobile Preview Component
@@ -251,6 +486,47 @@ export default function ResumeBuilder() {
     </div>
   );
 
+  // Mobile Navigation Tabs
+  const MobileTabs = () => (
+    <div className="flex border-b bg-white">
+      <button
+        onClick={() => setActiveMobileTab('edit')}
+        className={`flex-1 py-3.5 flex flex-col items-center justify-center gap-1 transition-all ${
+          activeMobileTab === 'edit' 
+            ? 'text-primary border-b-2 border-primary font-semibold bg-blue-50/50' 
+            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+        }`}
+      >
+        <PenLine size={18} className="mb-1" />
+        <span className="text-xs font-medium">Edit</span>
+      </button>
+      
+      <button
+        onClick={() => setActiveMobileTab('preview')}
+        className={`flex-1 py-3.5 flex flex-col items-center justify-center gap-1 transition-all ${
+          activeMobileTab === 'preview' 
+            ? 'text-primary border-b-2 border-primary font-semibold bg-blue-50/50' 
+            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+        }`}
+      >
+        <Eye size={18} className="mb-1" />
+        <span className="text-xs font-medium">Preview</span>
+      </button>
+      
+      <button
+        onClick={() => setActiveMobileTab('ats')}
+        className={`flex-1 py-3.5 flex flex-col items-center justify-center gap-1 transition-all ${
+          activeMobileTab === 'ats' 
+            ? 'text-primary border-b-2 border-primary font-semibold bg-blue-50/50' 
+            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+        }`}
+      >
+        <CheckCircle2 size={18} className="mb-1" />
+        <span className="text-xs font-medium">ATS Score</span>
+      </button>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Desktop Header */}
@@ -259,7 +535,7 @@ export default function ResumeBuilder() {
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
               <div className="h-8 w-8 bg-gray-900 text-white flex items-center justify-center font-serif font-bold rounded">R</div>
-              <span className="font-serif font-bold text-xl tracking-tight">Resume<span className="text-gray500">Builder</span></span>
+              <span className="font-serif font-bold text-xl tracking-tight">Resume<span className="text-gray-500">Builder</span></span>
             </div>
           </Link>
           
@@ -392,43 +668,7 @@ export default function ResumeBuilder() {
         {/* Mobile Layout */}
         <div className="md:hidden h-full flex flex-col">
           {/* Mobile Tabs */}
-          <div className="flex border-b bg-white">
-            <button
-              onClick={() => setActiveMobileTab('edit')}
-              className={`flex-1 py-3.5 flex flex-col items-center justify-center gap-1 transition-all ${
-                activeMobileTab === 'edit' 
-                  ? 'text-primary border-b-2 border-primary font-semibold bg-blue-50/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              <PenLine size={18} className="mb-1" />
-              <span className="text-xs font-medium">Edit</span>
-            </button>
-            
-            <button
-              onClick={() => setActiveMobileTab('preview')}
-              className={`flex-1 py-3.5 flex flex-col items-center justify-center gap-1 transition-all ${
-                activeMobileTab === 'preview' 
-                  ? 'text-primary border-b-2 border-primary font-semibold bg-blue-50/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              <Eye size={18} className="mb-1" />
-              <span className="text-xs font-medium">Preview</span>
-            </button>
-            
-            <button
-              onClick={() => setActiveMobileTab('ats')}
-              className={`flex-1 py-3.5 flex flex-col items-center justify-center gap-1 transition-all ${
-                activeMobileTab === 'ats' 
-                  ? 'text-primary border-b-2 border-primary font-semibold bg-blue-50/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              <CheckCircle2 size={18} className="mb-1" />
-              <span className="text-xs font-medium">ATS Score</span>
-            </button>
-          </div>
+          <MobileTabs />
 
           {/* Mobile Content */}
           <div className="flex-1 overflow-hidden">
@@ -464,6 +704,24 @@ export default function ResumeBuilder() {
               )}
             </Button>
           </div>
+
+          {/* Mobile Tips (Shows briefly on load) */}
+          {showMobileTips && (
+            <div className="absolute bottom-16 left-4 right-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white p-3 rounded-lg shadow-lg animate-in slide-in-from-bottom">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} />
+                  <span className="text-sm font-medium">Tip: Swipe between tabs to navigate</span>
+                </div>
+                <button 
+                  onClick={() => setShowMobileTips(false)}
+                  className="text-white/80 hover:text-white"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
