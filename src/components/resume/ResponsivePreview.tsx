@@ -1,88 +1,96 @@
-import React from 'react';
-import { ResumeData, TemplateData } from '@/lib/types';
+import React, { useRef, useEffect, useState } from 'react';
 
-// Import your actual templates
-import { Template2 } from '@/components/templates/Template2/template2';
-import { Template3 } from '@/components/templates/Template3/template3';
-import { Template4 } from '@/components/templates/Template4/template4';
-import { Template5 } from '@/components/templates/Template5/template5';
-import { Template7 } from '@/components/templates/Template7/template7';
-import { Template8 } from '@/components/templates/Template8/template8';
-
-interface ResumePreviewProps {
-  data: ResumeData;
+interface ResponsivePreviewProps {
+  children: React.ReactNode;
   scale?: number;
-  templateId?: string;
 }
 
-export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ data, scale = 1, templateId = 'template2' }, ref) => {
-  
-  // Convert ResumeData (multi-page) to TemplateData (single page)
-  const getTemplateData = (): TemplateData => {
-    // Get the first page or use defaults
-    const page = data.pages && data.pages.length > 0 ? data.pages[0] : {
-      summary: '',
-      experience: [],
-      education: [],
-      skills: [],
-      customSections: [],
-    };
-    
-    return {
-      personalInfo: data.personalInfo || {
-        fullName: '',
-        title: '',
-        email: '',
-        phone: '',
-        location: '',
-        website: '',
-        imageUrl: undefined
-      },
-      summary: page.summary || '',
-      experience: page.experience || [],
-      education: page.education || [],
-      skills: page.skills || [],
-      customSections: page.customSections || [],
-    };
-  };
+export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
-  const templateData = getTemplateData();
-
-  // Render the correct template based on templateId
-  const renderTemplate = () => {
-    switch(templateId) {
-      case 'template2':
-        return <Template2 data={templateData} />;
-      case 'template3':
-        return <Template3 data={templateData} />;
-      case 'template4':
-        return <Template4 data={templateData} />;
-      case 'template5':
-        return <Template5 data={templateData} />;
-      case 'template7':
-        return <Template7 data={templateData} />;
-      case 'template8':
-        return <Template8 data={templateData} />;
-      default:
-        return <Template2 data={templateData} />;
+  useEffect(() => {
+    function updateSize() {
+      if (!containerRef.current) return;
+      
+      const container = containerRef.current;
+      const parent = container.parentElement;
+      
+      if (!parent) return;
+      
+      // Get parent's actual available space
+      const parentWidth = parent.clientWidth;
+      const parentHeight = parent.clientHeight;
+      
+      console.log('Parent size:', parentWidth, parentHeight);
+      
+      setContainerSize({
+        width: parentWidth,
+        height: parentHeight
+      });
     }
+
+    updateSize();
+    
+    const resizeObserver = new ResizeObserver(() => {
+      setTimeout(updateSize, 50);
+    });
+    
+    if (containerRef.current?.parentElement) {
+      resizeObserver.observe(containerRef.current.parentElement);
+    }
+    
+    window.addEventListener('resize', updateSize);
+    
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  // Calculate scale based on container size
+  const calculateScale = () => {
+    const a4Width = 794; // 210mm in pixels
+    const a4Height = 1123; // 297mm in pixels
+    
+    if (containerSize.width === 0 || containerSize.height === 0) return scale * 0.7;
+    
+    const widthRatio = (containerSize.width - 40) / a4Width;
+    const heightRatio = (containerSize.height - 40) / a4Height;
+    
+    const fitRatio = Math.min(widthRatio, heightRatio) * 0.9;
+    const finalScale = Math.max(0.3, Math.min(fitRatio * scale, 1.2));
+    
+    return finalScale;
   };
+
+  const finalScale = calculateScale();
 
   return (
-    <div 
-      ref={ref}
-      className="w-full overflow-hidden bg-white"
-      style={{ 
-        width: '210mm', 
-        minHeight: '297mm', // Single page height
-        margin: '0 auto',
-        transform: `scale(${scale})`,
-        transformOrigin: 'top center'
+    <div
+      ref={containerRef}
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+        backgroundColor: '#f5f5f5',
       }}
     >
-      {renderTemplate()}
+      <div
+        style={{
+          transform: `scale(${finalScale})`,
+          transformOrigin: 'center center',
+          width: '210mm',
+          minHeight: '297mm',
+          backgroundColor: 'white',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
-});
-
-ResumePreview.displayName = 'ResumePreview';
+}
