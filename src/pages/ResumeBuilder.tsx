@@ -377,7 +377,7 @@ console.log('✅ PDF downloaded successfully!');
                     width: '595px',  // 210mm * 2.83465 = 595px
                     height: '842px', // 297mm * 2.83465 = 842px
                     // Scale to fit mobile screen while maintaining aspect ratio
-                    transform: 'scale(0.32)',
+                    transform: 'scale(0.45)',
                     transformOrigin: 'center center',
                     border: '1px solid #e5e7eb',
                   }}
