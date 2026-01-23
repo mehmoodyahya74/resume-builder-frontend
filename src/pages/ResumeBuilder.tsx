@@ -188,7 +188,6 @@ export default function ResumeBuilder() {
       console.log('📦 Sending HTML to AWS Lambda...');
       console.log('HTML length:', completeHTML.length);
       
-      // Send to Lambda
       const response = await fetch(PDF_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -200,35 +199,29 @@ export default function ResumeBuilder() {
       });
       
       if (!response.ok) {
-        // Try to get error message
         let errorMessage = `Server error: ${response.status}`;
         try {
           const errorData = await response.json();
           errorMessage += ` - ${errorData.message || errorData.error}`;
         } catch {
-          // If not JSON, get text
           const errorText = await response.text();
           errorMessage += ` - ${errorText}`;
         }
         throw new Error(errorMessage);
       }
       
-      // Lambda returns PDF directly - just download it
       console.log('✅ Received response from Lambda, decoding PDF...');
 
 const data = await response.json();
 
-// 1️⃣ Decode base64
 const binary = atob(data.pdf);
 const bytes = new Uint8Array(binary.length);
 for (let i = 0; i < binary.length; i++) {
   bytes[i] = binary.charCodeAt(i);
 }
 
-// 2️⃣ Create PDF Blob
 const pdfBlob = new Blob([bytes], { type: 'application/pdf' });
 
-// 3️⃣ Download
 const url = window.URL.createObjectURL(pdfBlob);
 const link = document.createElement('a');
 link.href = url;
@@ -348,8 +341,8 @@ console.log('✅ PDF downloaded successfully!');
             
             <ResizablePanel defaultSize={60} className="bg-gray-200/50">
               <div className="h-full overflow-y-auto p-8 flex justify-center items-start">
-  <ResumePreview data={resumeData} ref={printRef} scale={1} templateId={templateId} />
-</div>
+                <ResumePreview data={resumeData} ref={printRef} scale={zoomLevel} templateId={templateId} />
+              </div>
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>
@@ -398,9 +391,9 @@ console.log('✅ PDF downloaded successfully!');
               </div>
               
               <div className="flex-1 overflow-hidden relative">
-                <ResponsivePreview scale={zoomLevel}>
-                  <ResumePreview data={resumeData} ref={printRef} templateId={templateId} />
-                </ResponsivePreview>
+                <div className="w-full h-full flex justify-center items-start overflow-auto">
+                  <ResumePreview data={resumeData} ref={printRef} scale={zoomLevel} templateId={templateId} />
+                </div>
               </div>
             </>
           )}
