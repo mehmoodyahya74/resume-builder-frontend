@@ -4,6 +4,7 @@ import { ResumeForm } from '@/components/resume/ResumeForm';
 import { ResumePreview } from '@/components/resume/ResumePreview';
 import { ATSScoreChecker } from '@/components/resume/ATSScoreChecker';
 import { ResponsivePreview } from '@/components/resume/ResponsivePreview';
+import { MobileResumePreview } from '@/components/resume/MobileResumePreview';
 import { initialResumeData } from '@/data/initialResume';
 import { ResumeData } from '@/lib/types';
 import { Button } from '@/components/ui/button';
