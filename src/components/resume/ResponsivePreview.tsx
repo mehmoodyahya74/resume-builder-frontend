@@ -1,42 +1,55 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface ResponsivePreviewProps {
   children: React.ReactNode;
+  scale?: number;
 }
 
-export function ResponsivePreview({ children }: ResponsivePreviewProps) {
+export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
+  const [dynamicScale, setDynamicScale] = useState(scale);
 
   useEffect(() => {
-    const handleResize = () => {
+    function handleResize() {
       if (!containerRef.current) return;
 
       const containerWidth = containerRef.current.offsetWidth;
-      const A4_WIDTH = 794; // px (standard resume width)
+      const content = containerRef.current.firstElementChild as HTMLElement;
+      if (!content) return;
 
-      const newScale =
-        containerWidth < A4_WIDTH
-          ? containerWidth / A4_WIDTH
-          : 1;
+      const contentWidth = content.offsetWidth;
 
-      setScale(newScale);
-    };
+      // scale down if content is wider than container
+      if (contentWidth > containerWidth) {
+        setDynamicScale(containerWidth / contentWidth);
+      } else {
+        setDynamicScale(scale);
+      }
+    }
 
     handleResize();
     window.addEventListener('resize', handleResize);
+
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [scale]);
 
   return (
     <div
       ref={containerRef}
-      className="w-full h-full overflow-x-hidden flex justify-center"
+      style={{
+        width: '100%',
+        height: '100%',
+        overflowX: 'auto',
+        overflowY: 'auto',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: '10px',
+      }}
     >
       <div
         style={{
-          width: '794px',
-          transform: `scale(${scale})`,
+          transform: `scale(${dynamicScale})`,
           transformOrigin: 'top center',
         }}
       >
