@@ -9,11 +9,11 @@ import { Template8 } from '@/components/templates/Template8/template8';
 
 interface ResumePreviewProps {
   data: ResumeData;
-  scale?: number; // We accept but don't use
+  scale?: number;
   templateId?: string;
 }
 
-export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ data, scale = 1, templateId = 'template2' }, ref) => {
+export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ data, templateId = 'template2' }, ref) => {
   
   const getTemplateData = (): TemplateData => {
     const page = data.pages && data.pages.length > 0 ? data.pages[0] : {
