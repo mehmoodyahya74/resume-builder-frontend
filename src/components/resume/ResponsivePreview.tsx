@@ -9,7 +9,7 @@ interface ResponsivePreviewProps {
 
 const DEVICE_SIZES = {
   desktop: { width: '1024px', height: '768px' },
-  mobile: { width: '375px', height: '667px' }, // iPhone SE
+  mobile: { width: '420px', height: '667px' }, // iPhone SE
   tablet: { width: '768px', height: '1024px' }, // iPad
   auto: { width: '100%', height: 'auto' }
 };
