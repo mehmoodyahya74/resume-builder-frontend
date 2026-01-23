@@ -9,16 +9,6 @@
   position: relative;
 }
 
-@media print {
-  .template3-container {
-    margin: 0;
-    box-shadow: none;
-    width: 100%;
-    height: auto;
-    min-height: auto;
-  }
-}
-
 /* Force A4 dimensions for printing */
 @page {
   size: A4;
@@ -27,13 +17,14 @@
 
 @media print {
   .template3-container {
-    width: 210mm !important;
-    min-height: 297mm !important;
+    margin: 0;
+    box-shadow: none;
+    width: 100%;
+    height: auto;
+    min-height: auto;
   }
-}
 
-/* Ensure background colors print */
-@media print {
+  /* Ensure background colors print */
   .bg-slate-100 {
     background-color: #f8fafc !important;
     -webkit-print-color-adjust: exact;
@@ -51,4 +42,12 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  
+}
+
+/* Force A4 dimensions for printing */
+@media print {
+  .template3-container {
+    width: 210mm !important;
+    min-height: 297mm !important;
+  }
+}
