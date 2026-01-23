@@ -132,7 +132,7 @@ export default function ResumeBuilder() {
           }
         })
         .join('');
-      
+    
       const completeHTML = `
         <!DOCTYPE html>
         <html>
@@ -348,9 +348,7 @@ console.log('✅ PDF downloaded successfully!');
             
             <ResizablePanel defaultSize={60} className="bg-gray-200/50">
               <div className="h-full overflow-y-auto p-8 flex justify-center items-start">
-  <ResponsivePreview scale={1}>
-    <ResumePreview data={resumeData} ref={printRef} templateId={templateId} />
-  </ResponsivePreview>
+  <ResumePreview data={resumeData} ref={printRef} scale={1} templateId={templateId} />
 </div>
             </ResizablePanel>
           </ResizablePanelGroup>
