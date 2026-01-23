@@ -71,13 +71,14 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
   return (
     <div 
       ref={ref}
-      className="w-full overflow-hidden bg-white"
+      className="bg-white"
       style={{ 
         width: '210mm', 
         minHeight: '297mm', // Single page height
         margin: '0 auto',
         transform: `scale(${scale})`,
-        transformOrigin: 'top center'
+        transformOrigin: 'top center',
+        flexShrink: 0
       }}
     >
       {renderTemplate()}
