@@ -166,13 +166,3 @@ p, span, div, li {
   word-wrap: break-word !important;
   max-width: 100% !important;
 }
-/* Fix mobile preview - Add this at the very end of the file */
-@media (max-width: 768px) {
-  .mobile-preview-wrapper > div > div {
-    width: 100% !important;
-    min-height: auto !important;
-    transform: scale(0.85) !important;
-    transform-origin: top center !important;
-    margin: 0 auto !important;
-  }
-}
