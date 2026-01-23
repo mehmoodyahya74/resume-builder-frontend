@@ -367,30 +367,42 @@ console.log('✅ PDF downloaded successfully!');
               <ResumeForm data={resumeData} onChange={setResumeData} />
             </div>
           ) : (
-            <div className="flex-1 overflow-hidden relative bg-gray-50">
-              {/* Professional mobile preview with proper A4 dimensions */}
-              <div className="h-full w-full flex items-center justify-center p-2">
-                <div 
-                  className="bg-white shadow-xl rounded-sm overflow-hidden"
-                  style={{
-                    // A4 dimensions at 72 DPI (standard screen resolution)
-                    width: '595px',  // 210mm * 2.83465 = 595px
-                    height: '842px', // 297mm * 2.83465 = 842px
-                    // Scale to fit mobile screen while maintaining aspect ratio
-                    transform: 'scale(0.45)',
-                    transformOrigin: 'center center',
-                    border: '1px solid #e5e7eb',
-                  }}
+            <>
+              <div className="flex items-center justify-center px-4 py-3 bg-white border-b gap-4">
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={handleZoomOut}
+                  disabled={zoomLevel <= 0.4}
+                  className="h-8 w-8"
                 >
-                  <ResumePreview 
-                    data={resumeData} 
-                    ref={printRef} 
-                    templateId={templateId}
-                    scale={1} // Keep at 1 since we're scaling the container
-                  />
+                  <ZoomOut size={14} />
+                </Button>
+                
+                <div className="flex items-center gap-2 px-3">
+                  <Maximize size={14} className="text-gray-500" />
+                  <span className="text-sm font-medium min-w-10 text-center">
+                    {Math.round(zoomLevel * 100)}%
+                  </span>
                 </div>
+                
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={handleZoomIn}
+                  disabled={zoomLevel >= 1}
+                  className="h-8 w-8"
+                >
+                  <ZoomIn size={14} />
+                </Button>
               </div>
-            </div>
+              
+              <div className="flex-1 overflow-hidden relative">
+                <ResponsivePreview scale={zoomLevel}>
+                  <ResumePreview data={resumeData} ref={printRef} templateId={templateId} />
+                </ResponsivePreview>
+              </div>
+            </>
           )}
         </div>
       </main>
