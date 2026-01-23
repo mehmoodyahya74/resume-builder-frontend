@@ -51,4 +51,13 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+  /* Add this to template3.css */
+@media not print {
+  .template3-container {
+    transform-origin: top center;
+  }
+  
+  .template3-container .rounded-full {
+    transform: scale(calc(1 / var(--scale-factor, 1))) !important;
+  }
 }
