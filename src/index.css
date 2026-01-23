@@ -166,68 +166,67 @@ p, span, div, li {
   word-wrap: break-word !important;
   max-width: 100% !important;
 }
-/* UNIVERSAL MOBILE SCALING FOR ALL TEMPLATES */
-@media (max-width: 768px) {
-  .template1-container,
-  .template2-simple,
-  .template2-container,
-  .template3-simple,
-  .template3-container,
-  .template4-simple,
-  .template4-container,
-  .template5-simple,
-  .template5-container,
-  .template7-simple,
-  .template7-container,
-  .template8-simple,
-  .template8-container {
-    width: 100% !important;
-    min-height: auto !important;
-    margin: 0 auto !important;
-    padding: 10px !important;
-    box-sizing: border-box;
-    transform: scale(0.85);      /* scale down proportionally */
-    transform-origin: top center;
-  }
+/* ========================
+   UNIVERSAL TEMPLATE FIX
+   Keep desktop layout on mobile
+   ======================== */
 
-  /* Optional: adjust scaling based on very small screens */
-  @media (max-width: 480px) {
-    .template1-container,
-    .template2-simple,
-    .template2-container,
-    .template3-simple,
-    .template3-container,
-    .template4-simple,
-    .template4-container,
-    .template5-simple,
-    .template5-container,
-    .template7-simple,
-    .template7-container,
-    .template8-simple,
-    .template8-container {
-      transform: scale(0.7);
-    }
-  }
+/* Make all templates flexible and full-width */
+[class*="template"] {
+  max-width: 100% !important;   /* never exceed viewport */
+  min-width: 320px !important;  /* minimum readable width */
+  margin: 0 auto !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
 
-  /* Stack columns vertically */
-  .template2-content,
-  .template3-content,
-  .template4-content,
-  .template5-content,
-  .template7-content,
-  .template8-content {
-    display: block !important;
-    gap: 0 !important;
-  }
+/* Keep two-column grid layout on all screen sizes */
+[class*="template"] .template2-content,
+[class*="template"] .template-content,
+[class*="template"] .content {
+  display: grid !important;
+  grid-template-columns: 65% 35% !important; /* desktop layout */
+  gap: 20px !important;
+}
 
-  .template2-left, .template2-right,
-  .template3-left, .template3-right,
-  .template4-left, .template4-right,
-  .template5-left, .template5-right,
-  .template7-left, .template7-right,
-  .template8-left, .template8-right {
-    width: 100% !important;
-    padding: 0 !important;
-    border: none !important;
+/* Columns adjustments */
+[class*="template"] .template2-left,
+[class*="template"] .template-left,
+[class*="template"] .template2-right,
+[class*="template"] .template-right {
+  width: auto !important;
+  padding: 0 !important;
+  border-left: 1px solid #e2e8f0; /* optional design */
+}
+
+/* Responsive images */
+[class*="template"] img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+}
+
+/* Responsive text & skills */
+[class*="template"] .template2-skills span,
+[class*="template"] .skill,
+[class*="template"] .custom-skill {
+  font-size: clamp(10px, 2vw, 13px) !important;
+  padding: clamp(3px, 1vw, 5px) clamp(5px, 2vw, 12px) !important;
+}
+
+/* Prevent scaling on mobile */
+@media screen and (max-width: 768px) {
+  [class*="template"] {
+    transform: none !important;
+    overflow-x: auto !important; /* allow horizontal scroll if needed */
   }
+}
+
+/* Fix word wrapping and long content */
+[class*="template"] * {
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  max-width: 100% !important;
 }
