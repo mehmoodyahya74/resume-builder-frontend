@@ -3,32 +3,23 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 interface ResponsivePreviewProps {
   children: React.ReactNode;
   scale?: number;
-  mode?: 'desktop' | 'mobile' | 'tablet' | 'auto';
-  enableTouch?: boolean;
+  mobileScale?: number; // Separate scale for mobile previews
 }
-
-const DEVICE_SIZES = {
-  desktop: { width: '1024px', height: '768px' },
-  mobile: { width: '375px', height: '667px' }, // iPhone SE
-  tablet: { width: '768px', height: '1024px' }, // iPad
-  auto: { width: '100%', height: 'auto' }
-};
 
 export function ResponsivePreview({ 
   children, 
-  scale = 1, 
-  mode = 'auto',
-  enableTouch = false 
+  scale = 1,
+  mobileScale = 0.8 // Default mobile preview scale
 }: ResponsivePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [dynamicScale, setDynamicScale] = useState(scale);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
 
-  // Detect mobile device
+  // Detect if we're on a mobile device/viewport
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobileViewport(window.innerWidth <= 768);
     };
     
     checkMobile();
@@ -36,69 +27,39 @@ export function ResponsivePreview({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Calculate scale based on container vs content width
   const updateScale = useCallback(() => {
     if (!containerRef.current || !contentRef.current) return;
 
     const containerWidth = containerRef.current.offsetWidth;
-    const contentWidth = contentRef.current.offsetWidth;
-
+    const content = contentRef.current;
+    
+    // Reset width to get natural width
+    content.style.width = '375px'; // Standard mobile width
+    content.style.height = '667px'; // Standard mobile height
+    
+    const contentWidth = content.offsetWidth;
+    
+    // Calculate scale to fit container
+    let calculatedScale;
     if (contentWidth > containerWidth) {
-      setDynamicScale(containerWidth / contentWidth);
+      calculatedScale = containerWidth / contentWidth;
     } else {
-      setDynamicScale(scale);
+      calculatedScale = isMobileViewport ? mobileScale : scale;
     }
-  }, [scale]);
+    
+    // Apply minimum scale
+    const minScale = isMobileViewport ? 0.5 : 0.3;
+    calculatedScale = Math.max(calculatedScale, minScale);
+    
+    setDynamicScale(calculatedScale);
+  }, [scale, mobileScale, isMobileViewport]);
 
   useEffect(() => {
     updateScale();
     window.addEventListener('resize', updateScale);
-
     return () => window.removeEventListener('resize', updateScale);
   }, [updateScale]);
-
-  // Handle touch events for mobile interaction
-  useEffect(() => {
-    if (!enableTouch || !contentRef.current) return;
-
-    const content = contentRef.current;
-    let initialDistance = 0;
-    let currentScale = dynamicScale;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 2) {
-        initialDistance = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length === 2) {
-        e.preventDefault();
-        const currentDistance = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
-        
-        if (initialDistance > 0) {
-          const newScale = currentScale * (currentDistance / initialDistance);
-          setDynamicScale(Math.min(Math.max(newScale, 0.5), 2)); // Limit scale between 0.5x and 2x
-        }
-      }
-    };
-
-    content.addEventListener('touchstart', handleTouchStart, { passive: false });
-    content.addEventListener('touchmove', handleTouchMove, { passive: false });
-
-    return () => {
-      content.removeEventListener('touchstart', handleTouchStart);
-      content.removeEventListener('touchmove', handleTouchMove);
-    };
-  }, [enableTouch, dynamicScale]);
-
-  const device = DEVICE_SIZES[mode];
-  const isFixedSize = mode !== 'auto';
 
   return (
     <div
@@ -106,52 +67,79 @@ export function ResponsivePreview({
       style={{
         width: '100%',
         height: '100%',
-        overflow: isMobile && enableTouch ? 'auto' : 'hidden',
+        overflow: 'hidden',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-start',
-        padding: isMobile ? '8px' : '10px',
+        alignItems: 'center', // Center vertically too
+        padding: '20px',
         backgroundColor: '#f5f5f5',
-        borderRadius: '8px',
-        position: 'relative',
-        touchAction: enableTouch ? 'none' : 'auto'
       }}
     >
-      {/* Mobile device frame */}
-      {mode === 'mobile' && (
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 'calc(100% + 40px)',
-          height: '40px',
-          backgroundColor: '#333',
-          borderRadius: '20px 20px 0 0',
-          zIndex: 1
-        }} />
-      )}
-      
+      {/* Mobile Frame Container */}
       <div
-        ref={contentRef}
         style={{
           transform: `scale(${dynamicScale})`,
-          transformOrigin: 'top center',
-          width: isFixedSize ? device.width : '100%',
-          height: isFixedSize ? device.height : 'auto',
-          minHeight: isFixedSize ? device.height : 'auto',
+          transformOrigin: 'center center', // Scale from center
+          width: '375px', // Fixed mobile width
+          height: '667px', // Fixed mobile height
           backgroundColor: 'white',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          transition: enableTouch ? 'none' : 'transform 0.2s ease-out',
-          overflow: 'auto',
-          pointerEvents: enableTouch ? 'auto' : 'none',
-          ...(mode === 'mobile' && {
-            borderRadius: '24px',
-            border: '12px solid #333'
-          })
+          borderRadius: '24px',
+          border: '12px solid #333',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+          overflow: 'hidden',
+          position: 'relative',
+          transition: 'transform 0.3s ease-out'
         }}
       >
-        {children}
+        {/* Mobile Status Bar */}
+        <div style={{
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          right: '0',
+          height: '24px',
+          backgroundColor: '#333',
+          borderTopLeftRadius: '12px',
+          borderTopRightRadius: '12px',
+          zIndex: 10
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '8px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '40px',
+            height: '4px',
+            backgroundColor: '#666',
+            borderRadius: '2px'
+          }} />
+        </div>
+        
+        {/* Content Area */}
+        <div
+          ref={contentRef}
+          style={{
+            width: '100%',
+            height: '100%',
+            paddingTop: '24px', // Make room for status bar
+            overflow: 'auto',
+            boxSizing: 'border-box'
+          }}
+        >
+          {children}
+        </div>
+        
+        {/* Home Indicator (for modern phones) */}
+        <div style={{
+          position: 'absolute',
+          bottom: '8px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '120px',
+          height: '4px',
+          backgroundColor: '#333',
+          borderRadius: '2px'
+        }} />
       </div>
     </div>
   );
