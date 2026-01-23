@@ -397,7 +397,7 @@ console.log('✅ PDF downloaded successfully!');
                 </Button>
               </div>
               
-              <div className="flex-1 overflow-auto">
+              <div className="flex-1 overflow-auto mobile-preview-wrapper">
   <ResponsivePreview scale={zoomLevel}>
     <ResumePreview data={resumeData} ref={printRef} templateId={templateId} />
   </ResponsivePreview>
