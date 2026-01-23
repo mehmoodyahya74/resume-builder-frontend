@@ -355,56 +355,27 @@ console.log('✅ PDF downloaded successfully!');
         </div>
 
         <div className="md:hidden h-full flex flex-col bg-gray-50">
-          {activeTab === 'edit' ? (
-            <div className="flex-1 overflow-y-auto p-4 pb-20">
-              <div className="mb-6">
-                <h2 className="text-2xl font-serif font-bold text-gray-900">Editor</h2>
-                <p className="text-muted-foreground text-sm">Update your information below</p>
-              </div>
-              <div className="mb-6">
-                <ATSScoreChecker data={resumeData} />
-              </div>
-              <ResumeForm data={resumeData} onChange={setResumeData} />
-            </div>
-          ) : (
-            <>
-              <div className="flex items-center justify-center px-4 py-3 bg-white border-b gap-4">
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  onClick={handleZoomOut}
-                  disabled={zoomLevel <= 0.4}
-                  className="h-8 w-8"
-                >
-                  <ZoomOut size={14} />
-                </Button>
-                
-                <div className="flex items-center gap-2 px-3">
-                  <Maximize size={14} className="text-gray-500" />
-                  <span className="text-sm font-medium min-w-10 text-center">
-                    {Math.round(zoomLevel * 100)}%
-                  </span>
-                </div>
-                
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  onClick={handleZoomIn}
-                  disabled={zoomLevel >= 1}
-                  className="h-8 w-8"
-                >
-                  <ZoomIn size={14} />
-                </Button>
-              </div>
-              
-              <div className="flex-1 overflow-hidden relative">
-                <ResponsivePreview scale={zoomLevel}>
-                  <ResumePreview data={resumeData} ref={printRef} templateId={templateId} />
-                </ResponsivePreview>
-              </div>
-            </>
-          )}
-        </div>
+  {activeTab === 'edit' ? (
+    <div className="flex-1 overflow-y-auto p-4 pb-20">
+      <div className="mb-6">
+        <h2 className="text-2xl font-serif font-bold text-gray-900">Editor</h2>
+        <p className="text-muted-foreground text-sm">Update your information below</p>
+      </div>
+      <div className="mb-6">
+        <ATSScoreChecker data={resumeData} />
+      </div>
+      <ResumeForm data={resumeData} onChange={setResumeData} />
+    </div>
+  ) : (
+    <div className="flex-1 overflow-hidden">
+      <MobileResumePreview 
+        data={resumeData} 
+        ref={printRef} 
+        templateId={templateId}
+      />
+    </div>
+  )}
+</div>
       </main>
     </div>
   );
