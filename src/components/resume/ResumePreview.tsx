@@ -1,7 +1,5 @@
 import React from 'react';
 import { ResumeData, TemplateData } from '@/lib/types';
-
-// Import your actual templates
 import { Template2 } from '@/components/templates/Template2/template2';
 import { Template3 } from '@/components/templates/Template3/template3';
 import { Template4 } from '@/components/templates/Template4/template4';
@@ -17,9 +15,7 @@ interface ResumePreviewProps {
 
 export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps>(({ data, scale = 1, templateId = 'template2' }, ref) => {
   
-  // Convert ResumeData (multi-page) to TemplateData (single page)
   const getTemplateData = (): TemplateData => {
-    // Get the first page or use defaults
     const page = data.pages && data.pages.length > 0 ? data.pages[0] : {
       summary: '',
       experience: [],
@@ -48,7 +44,6 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
 
   const templateData = getTemplateData();
 
-  // Render the correct template based on templateId
   const renderTemplate = () => {
     switch(templateId) {
       case 'template2':
@@ -74,10 +69,8 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
       className="w-full overflow-hidden bg-white"
       style={{ 
         width: '210mm', 
-        minHeight: '297mm', // Single page height
+        minHeight: '297mm',
         margin: '0 auto',
-        transform: `scale(${scale})`,
-        transformOrigin: 'top center'
       }}
     >
       {renderTemplate()}
