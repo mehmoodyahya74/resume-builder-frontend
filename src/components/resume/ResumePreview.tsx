@@ -67,10 +67,12 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
     <div 
       ref={ref}
       className="bg-white"
-      style={{ 
-        width: '210mm', 
-        minHeight: '297mm',
-      }}
+      style={{
+  width: '100%',
+  maxWidth: '210mm',
+  minHeight: '297mm',
+}}
+
     >
       {renderTemplate()}
     </div>
