@@ -12,13 +12,13 @@ export const ResumePreview = React.forwardRef<HTMLDivElement, ResumePreviewProps
   return (
     <div 
       ref={ref}
-      className="w-full overflow-hidden bg-white"
+      className="bg-white"
       style={{ 
         width: '210mm', 
         minHeight: '297mm',
         margin: '0 auto',
-        transform: `scale(${scale})`,
-        transformOrigin: 'top center'
+        // REMOVED: transform: `scale(${scale})`,
+        // REMOVED: transformOrigin: 'top center'
       }}
     >
       <TemplateContainer data={data} templateId={templateId} />
