@@ -19,7 +19,6 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
 
       const contentWidth = content.offsetWidth;
 
-      // scale down if content is wider than container
       if (contentWidth > containerWidth) {
         setDynamicScale(containerWidth / contentWidth);
       } else {
@@ -39,7 +38,7 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
       style={{
         width: '100%',
         height: '100%',
-        overflow: 'hidden',
+        overflow: 'auto',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
@@ -48,11 +47,13 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
     >
       <div
         style={{
-          transform: `scale(${dynamicScale})`,
+          width: `${210 * dynamicScale}mm`,
+          minHeight: `${297 * dynamicScale}mm`,
+          transform: 'none',
           transformOrigin: 'top center',
-          width: '210mm',
-          height: `${297 * dynamicScale}mm`,
-          transition: 'transform 0.2s ease-out'
+          transition: 'all 0.2s ease-out',
+          // CSS variable for circle fix
+          ['--scale-factor' as any]: dynamicScale
         }}
       >
         {children}
