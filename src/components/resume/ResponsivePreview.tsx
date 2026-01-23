@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface ResponsivePreviewProps {
   children: React.ReactNode;
@@ -7,36 +7,52 @@ interface ResponsivePreviewProps {
 
 export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [adjustedScale, setAdjustedScale] = useState(scale);
+  const [dynamicScale, setDynamicScale] = useState(scale);
 
   useEffect(() => {
-    const updateScale = () => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
-        
-        if (width < 768) {
-          const newScale = Math.min(1, (width - 32) / 794);
-          setAdjustedScale(Math.max(0.6, newScale));
-        } else {
-          setAdjustedScale(scale);
-        }
-      }
-    };
+    function handleResize() {
+      if (!containerRef.current) return;
 
-    updateScale();
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
+      const containerWidth = containerRef.current.offsetWidth;
+      const content = containerRef.current.firstElementChild as HTMLElement;
+      if (!content) return;
+
+      const contentWidth = content.offsetWidth;
+
+      // scale down if content is wider than container
+      if (contentWidth > containerWidth) {
+        setDynamicScale(containerWidth / contentWidth);
+      } else {
+        setDynamicScale(scale);
+      }
+    }
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
   }, [scale]);
 
   return (
-    <div ref={containerRef} className="w-full h-full flex justify-center items-start overflow-auto">
-      <div 
-        className="bg-white"
+    <div
+      ref={containerRef}
+      style={{
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: '10px',
+      }}
+    >
+      <div
         style={{
-          width: '210mm',
-          minHeight: '297mm',
-          transform: `scale(${adjustedScale})`,
+          transform: `scale(${dynamicScale})`,
           transformOrigin: 'top center',
+          width: '210mm',
+          height: `${297 * dynamicScale}mm`,
+          transition: 'transform 0.2s ease-out'
         }}
       >
         {children}
