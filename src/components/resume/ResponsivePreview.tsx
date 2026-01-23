@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface ResponsivePreviewProps {
   children: React.ReactNode;
-  scale?: number;
+  scale?: number; // From zoom buttons (0.4 to 1)
 }
 
 export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProps) {
@@ -12,14 +12,16 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
   useEffect(() => {
     const updateScale = () => {
       if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
+        const containerWidth = containerRef.current.offsetWidth;
         
-        if (width < 768) {
-          const newScale = Math.min(1, (width - 32) / 794);
-          setAdjustedScale(Math.max(0.6, newScale));
-        } else {
-          setAdjustedScale(scale);
-        }
+        // Always ensure it fits the screen
+        const maxFitScale = (containerWidth - 32) / 794; // 794px = 210mm
+        
+        // Combine: fit to screen AND apply zoom
+        const finalScale = Math.min(maxFitScale, scale);
+        
+        // Keep it within bounds
+        setAdjustedScale(Math.max(0.4, Math.min(1, finalScale)));
       }
     };
 
@@ -29,12 +31,12 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
   }, [scale]);
 
   return (
-    <div ref={containerRef} className="w-full h-full flex justify-center items-start overflow-auto">
+    <div 
+      ref={containerRef} 
+      className="w-full h-full flex justify-center items-start overflow-auto p-4"
+    >
       <div 
-        className="bg-white"
         style={{
-          width: '210mm',
-          minHeight: '297mm',
           transform: `scale(${adjustedScale})`,
           transformOrigin: 'top center',
         }}
