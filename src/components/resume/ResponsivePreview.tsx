@@ -39,8 +39,7 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
       style={{
         width: '100%',
         height: '100%',
-        overflowX: 'auto',
-        overflowY: 'auto',
+        overflow: 'hidden',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
@@ -51,6 +50,9 @@ export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProp
         style={{
           transform: `scale(${dynamicScale})`,
           transformOrigin: 'top center',
+          width: '210mm',
+          height: `${297 * dynamicScale}mm`,
+          transition: 'transform 0.2s ease-out'
         }}
       >
         {children}
