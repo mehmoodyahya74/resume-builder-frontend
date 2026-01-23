@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ResponsivePreviewProps {
   children: React.ReactNode;
@@ -7,53 +7,36 @@ interface ResponsivePreviewProps {
 
 export function ResponsivePreview({ children, scale = 1 }: ResponsivePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dynamicScale, setDynamicScale] = useState(scale);
+  const [adjustedScale, setAdjustedScale] = useState(scale);
 
   useEffect(() => {
-    function handleResize() {
-      if (!containerRef.current) return;
-
-      const containerWidth = containerRef.current.offsetWidth;
-      const content = containerRef.current.firstElementChild as HTMLElement;
-      if (!content) return;
-
-      const contentWidth = content.offsetWidth;
-
-      if (contentWidth > containerWidth) {
-        setDynamicScale(containerWidth / contentWidth);
-      } else {
-        setDynamicScale(scale);
+    const updateScale = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.offsetWidth;
+        
+        if (width < 768) {
+          const newScale = Math.min(1, (width - 32) / 794);
+          setAdjustedScale(Math.max(0.6, newScale));
+        } else {
+          setAdjustedScale(scale);
+        }
       }
-    }
+    };
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
   }, [scale]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: '100%',
-        height: '100%',
-        overflow: 'auto',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        padding: '10px',
-      }}
-    >
-      <div
+    <div ref={containerRef} className="w-full h-full flex justify-center items-start overflow-auto">
+      <div 
+        className="bg-white"
         style={{
-          width: `${210 * dynamicScale}mm`,
-          minHeight: `${297 * dynamicScale}mm`,
-          transform: 'none',
+          width: '210mm',
+          minHeight: '297mm',
+          transform: `scale(${adjustedScale})`,
           transformOrigin: 'top center',
-          transition: 'all 0.2s ease-out',
-          // CSS variable for circle fix
-          ['--scale-factor' as any]: dynamicScale
         }}
       >
         {children}
