@@ -1,12 +1,43 @@
-/* EXACT styling from your original template */
+/* EXACT styling from your original template - UPDATED */
 .template3-container {
-  width: 210mm;
+  width: 100%; /* CHANGED: from 210mm to 100% for responsive scaling */
+  max-width: 210mm; /* ADDED: maximum A4 width */
   min-height: 297mm;
   background: white;
   margin: 0 auto;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   overflow: hidden;
   position: relative;
+  /* ADDED: Maintain A4 aspect ratio to prevent distortion */
+  aspect-ratio: 210 / 297;
+}
+
+/* ADDED: Container to ensure proper scaling without distortion */
+.template3-content-wrapper {
+  width: 100%;
+  height: 100%;
+  display: block;
+  contain: layout style paint;
+}
+
+/* ADDED: Force all images to maintain aspect ratio */
+.template3-container img,
+.template3-container .profile-image,
+.template3-container .profile-image img,
+.template3-container .circle-image,
+.template3-container [class*="profile"],
+.template3-container [class*="image"] {
+  aspect-ratio: 1 / 1 !important; /* Force square for all profile images */
+  object-fit: cover !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 50% !important; /* Ensure circles stay circular */
+}
+
+/* ADDED: Prevent any element from causing width distortion */
+.template3-container * {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Force A4 dimensions for printing */
@@ -19,9 +50,10 @@
   .template3-container {
     margin: 0;
     box-shadow: none;
-    width: 100%;
-    height: auto;
+    width: 210mm !important;
+    height: 297mm !important;
     min-height: auto;
+    aspect-ratio: auto !important; /* Remove aspect-ratio for print */
   }
 
   /* Ensure background colors print */
@@ -42,12 +74,40 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+  
+  /* Ensure images print correctly */
+  .template3-container img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
 }
 
-/* Force A4 dimensions for printing */
+/* ADDED: Mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .template3-container {
+    /* On mobile, let it scale naturally within parent container */
+    width: 100% !important;
+    max-width: 100% !important;
+    aspect-ratio: 210 / 297; /* Maintain A4 shape */
+  }
+  
+  /* Ensure all content scales proportionally */
+  .template3-container > * {
+    transform-origin: top left;
+  }
+}
+
+/* ADDED: Prevent transform distortion */
+.template3-container {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Force A4 dimensions for printing (keep original) */
 @media print {
   .template3-container {
     width: 210mm !important;
     min-height: 297mm !important;
+    max-width: none !important;
   }
 }
