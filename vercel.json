@@ -1,23 +1,12 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/sitemap.xml",
-      "destination": "https://www.resumecon.xyz/sitemap.xml",
-      "permanent": true
+      "destination": "/sitemap.xml"
     },
     {
-      "source": "/sitemap",
-      "destination": "https://www.resumecon.xyz/sitemap.xml",
-      "permanent": true
-    }
-  ],
-  "headers": [
-    {
-      "source": "/sitemap.xml",
-      "headers": [
-        { "key": "Content-Type", "value": "application/xml" },
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
-      ]
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
