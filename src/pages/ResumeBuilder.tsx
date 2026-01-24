@@ -349,34 +349,38 @@ console.log('✅ PDF downloaded successfully!');
             
             <ResizablePanel defaultSize={60} className="bg-gray-200/50">
               <div className="h-full overflow-y-auto p-8 flex justify-center items-start">
-  <ResumePreview data={resumeData} ref={printRef} scale={1} templateId={templateId} />
-</div>
+                <ResumePreview data={resumeData} ref={printRef} scale={1} templateId={templateId} />
+              </div>
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>
 
         <div className="md:hidden h-full flex flex-col bg-gray-50">
-  {activeTab === 'edit' ? (
-    <div className="flex-1 overflow-y-auto p-4 pb-20">
-      <div className="mb-6">
-        <h2 className="text-2xl font-serif font-bold text-gray-900">Editor</h2>
-        <p className="text-muted-foreground text-sm">Update your information below</p>
-      </div>
-      <div className="mb-6">
-        <ATSScoreChecker data={resumeData} />
-      </div>
-      <ResumeForm data={resumeData} onChange={setResumeData} />
-    </div>
-  ) : (
-    <div className="flex-1 overflow-hidden">
-      <MobileResumePreview 
-        data={resumeData} 
-        ref={printRef} 
-        templateId={templateId}
-      />
-    </div>
-  )}
-</div>
+          {activeTab === 'edit' ? (
+            <div className="flex-1 overflow-y-auto p-4 pb-20">
+              <div className="mb-6">
+                <h2 className="text-2xl font-serif font-bold text-gray-900">Editor</h2>
+                <p className="text-muted-foreground text-sm">Update your information below</p>
+              </div>
+              <div className="mb-6">
+                <ATSScoreChecker data={resumeData} />
+              </div>
+              <ResumeForm data={resumeData} onChange={setResumeData} />
+            </div>
+          ) : (
+            <div className="flex-1 overflow-hidden relative bg-gray-50">
+              {/* SIMPLE MOBILE PREVIEW */}
+              <div className="h-full w-full flex items-center justify-center p-2">
+                <ResumePreview 
+                  data={resumeData} 
+                  ref={printRef} 
+                  templateId={templateId}
+                  scale={0.38} // ← This controls mobile size
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );
