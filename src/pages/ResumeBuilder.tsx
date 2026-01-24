@@ -369,14 +369,59 @@ console.log('✅ PDF downloaded successfully!');
             </div>
           ) : (
             <div className="flex-1 overflow-hidden relative bg-gray-50">
-              {/* SIMPLE MOBILE PREVIEW */}
-              <div className="h-full w-full flex items-center justify-center p-2">
-                <ResumePreview 
-                  data={resumeData} 
-                  ref={printRef} 
-                  templateId={templateId}
-                  scale={0.38} // ← This controls mobile size
-                />
+              {/* MOBILE PREVIEW MESSAGE - TEMPORARILY UNAVAILABLE */}
+              <div className="h-full w-full flex flex-col items-center justify-center p-8 text-center">
+                <div className="max-w-md mx-auto">
+                  <div className="mb-6">
+                    <div className="h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Eye className="h-8 w-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-serif font-bold text-gray-900 mb-2">
+                      Preview Temporarily Unavailable
+                    </h3>
+                    <p className="text-muted-foreground mb-6">
+                      Our team is currently improving the mobile preview experience. 
+                      For the best experience, please use desktop mode to view and 
+                      download your resume.
+                    </p>
+                    
+                    <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
+                      <p className="text-sm text-blue-800">
+                        <strong>Tip:</strong> You can still edit your resume here, 
+                        then switch to desktop for preview and PDF download.
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <p className="text-sm text-gray-600 font-medium">
+                        To access full preview features:
+                      </p>
+                      <ul className="text-sm text-gray-500 space-y-2 text-left">
+                        <li className="flex items-start">
+                          <span className="inline-block h-5 w-5 bg-gray-100 rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">1</span>
+                          Open this page on a desktop or laptop
+                        </li>
+                        <li className="flex items-start">
+                          <span className="inline-block h-5 w-5 bg-gray-100 rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">2</span>
+                          Use desktop mode in your mobile browser settings
+                        </li>
+                        <li className="flex items-start">
+                          <span className="inline-block h-5 w-5 bg-gray-100 rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">3</span>
+                          Continue editing now, preview later on desktop
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => setActiveTab('edit')}
+                  >
+                    <PenLine className="h-4 w-4 mr-2" />
+                    Continue Editing Resume
+                  </Button>
+                </div>
               </div>
             </div>
           )}
