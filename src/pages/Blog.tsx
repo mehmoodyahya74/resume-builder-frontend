@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'wouter';
+import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -155,6 +156,12 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+      <SEO
+        title="Career Blog - Resume Tips, Interview Advice & Job Search Strategies"
+        description="Expert career advice, resume writing tips, interview strategies, and job search guidance. Stay updated with the latest hiring trends and professional development insights."
+        canonical="https://www.resumecon.xyz/blog"
+        keywords="resume tips, career advice, interview tips, job search strategies, professional development"
+      />
       <header className="border-b bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
