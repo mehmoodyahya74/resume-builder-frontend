@@ -203,11 +203,14 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
-              <div className="h-8 w-8 bg-gray-900 text-white flex items-center justify-center font-bold rounded-lg">
-                R
-              </div>
+              {/* Updated: Replaced "R" circle with favicon */}
+              <img 
+                src="/favicon.png"
+                alt="ResumeCon Logo"
+                className="h-8 w-8 object-contain"
+              />
               <span className="font-bold text-xl text-gray-900">
-                Resume<span className="text-gray-600">Builder</span>
+                Resume<span className="text-blue-600">Con</span>
               </span>
             </div>
           </Link>
@@ -413,10 +416,13 @@ export default function LandingPage() {
                       ATS Score: 98%
                     </Badge>
                     <div className="flex items-center gap-1 text-xs text-gray-600">
-                      <div className="h-4 w-4 bg-gray-900 rounded flex items-center justify-center text-white text-xs font-bold">
-                        R
-                      </div>
-                      <span>ResumeBuilder</span>
+                      {/* Updated: Replaced "R" circle with favicon */}
+                      <img 
+                        src="/favicon.png"
+                        alt="ResumeCon"
+                        className="h-4 w-4 object-contain"
+                      />
+                      <span>ResumeCon</span>
                     </div>
                   </div>
                 </div>
@@ -637,11 +643,14 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             <div className="lg:col-span-2">
               <div className="flex items-center gap-3 mb-6">
-                <div className="h-10 w-10 bg-white text-gray-900 flex items-center justify-center font-bold rounded-lg">
-                  R
-                </div>
+                {/* Updated: Replaced "R" circle with favicon */}
+                <img 
+                  src="/favicon.png"
+                  alt="ResumeCon Logo"
+                  className="h-10 w-10 object-contain"
+                />
                 <div>
-                  <span className="font-bold text-2xl">Resume<span className="text-gray-400">Builder</span></span>
+                  <span className="font-bold text-2xl">Resume<span className="text-blue-400">Con</span></span>
                 </div>
               </div>
               <p className="text-gray-400 mb-6 max-w-md">
@@ -691,7 +700,7 @@ export default function LandingPage() {
           <div className="border-t border-gray-800 pt-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-gray-500 text-sm">
-                © 2024 ResumeBuilder. All rights reserved.
+                © 2024 ResumeCon. All rights reserved.
               </div>
               <div className="flex items-center gap-4 text-sm text-gray-500">
                 <span>Made with <Heart size={12} className="inline text-red-500" /> for job seekers</span>
