@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'wouter';
+import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -121,6 +122,12 @@ export default function PrivacyPolicy() {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+      <SEO
+        title="Privacy Policy - How We Protect Your Data"
+        description="Learn how ResumeCon protects your privacy. Your resume data is processed locally, never sold, and you have full control. GDPR and CCPA compliant."
+        canonical="https://www.resumecon.xyz/privacy"
+        keywords="privacy policy, data protection, GDPR compliant, resume data security"
+      />
       <header className="border-b bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
