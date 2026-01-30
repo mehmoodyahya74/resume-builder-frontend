@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'wouter';
+import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -95,6 +96,12 @@ export default function AboutUs() {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+      <SEO
+        title="About Us - Our Mission to Help You Land Your Dream Job"
+        description="Learn about ResumeCon's mission to democratize professional resume creation. Meet our team of HR experts, designers, and developers helping job seekers worldwide."
+        canonical="https://www.resumecon.xyz/about"
+        keywords="about resumecon, resume builder team, career tools mission, job seeker help"
+      />
       <header className="border-b bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
