@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Link } from 'wouter';
-import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -99,12 +98,6 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
-      <SEO
-        title="Contact Us - Get Help With Your Resume"
-        description="Have questions about our resume builder? Contact our support team. We respond within 24 hours to help you create the perfect resume."
-        canonical="https://www.resumecon.xyz/contact"
-        keywords="contact resumecon, resume help, customer support, resume questions"
-      />
       <header className="border-b bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
