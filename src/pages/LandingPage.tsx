@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -200,12 +199,6 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <SEO
-        title="Free Resume Builder - Create Professional CV Online"
-        description="Create a professional, ATS-optimized resume in minutes with our free online resume builder. Choose from 50+ templates, get AI-powered suggestions, and land more interviews."
-        canonical="https://www.resumecon.xyz/"
-        keywords="resume builder, free resume maker, CV builder, professional resume, ATS resume, online resume creator"
-      />
       <header className="border-b bg-white sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
