@@ -309,15 +309,15 @@ export default function LandingPage() {
               
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-snug">
                 <span className="block">
-                  Create a Professional
+                  The 100% Free Resume Builder
                 </span>
                 <span className="block text-blue-600">
-                  CV in Minutes
+                  Getting You Hired Fast
                 </span>
               </h1>
               
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Build an ATS-friendly resume that employers love. Simple, fast, and built for local job markets.
+                Create an ATS-optimized resume that gets you interviews. 100% free, no credit card, no hidden fees. Trusted by 85,000+ job seekers.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -430,10 +430,10 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              Create Your Perfect Resume in <span className="text-blue-600">7 Minutes</span>
+              Build Your Job-Ready Resume in <span className="text-blue-600">3 Easy Steps</span>
             </h2>
             <p className="text-gray-600">
-              From blank page to interview-ready in less time than a coffee break
+              Pick a template, add your content with AI help, download as PDF. No credit card required.
             </p>
           </div>
 
@@ -512,10 +512,10 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              Why Choose ResumeBuilder
+              Features of Our Free Resume Builder
             </h2>
             <p className="text-gray-600">
-              Built with technology to give you an advantage
+              AI-powered tools trusted by professionals at Google, Apple, Microsoft & more
             </p>
           </div>
 
@@ -546,10 +546,10 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              Trusted by Professionals
+              Job Seekers Love Our Resume Builder
             </h2>
             <p className="text-gray-600">
-              See what professionals from leading companies say
+              Join 85,000+ professionals who landed interviews using ResumeBuilder
             </p>
           </div>
 
@@ -593,7 +593,7 @@ export default function LandingPage() {
               Secure & Trusted
             </Badge>
             <h2 className="text-2xl md:text-4xl font-bold text-white mb-6">
-              Ready to Transform Your Career?
+              Ready to Make Your Free Resume?
             </h2>
             <p className="text-lg text-gray-300 mb-8">
               Join thousands who got interviews with our AI-optimized resumes
