@@ -99,8 +99,15 @@ export default function AboutUs() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer group">
-              <div className="h-8 w-8 bg-gray-900 text-white flex items-center justify-center font-serif font-bold rounded group-hover:bg-gray-800 transition-colors">R</div>
-              <span className="font-serif font-bold text-xl tracking-tight">Resume<span className="text-gray-500">Builder</span></span>
+              {/* Updated: Replaced "R" circle with favicon */}
+              <img 
+                src="/favicon.png"
+                alt="ResumeCon Logo"
+                className="h-8 w-8 object-contain group-hover:opacity-90 transition-opacity"
+              />
+              <span className="font-serif font-bold text-xl tracking-tight">
+                Resume<span className="text-blue-600">Con</span>
+              </span>
             </div>
           </Link>
           <nav className="hidden md:flex items-center gap-1">
@@ -191,7 +198,7 @@ export default function AboutUs() {
                   No one should be held back by the cost or complexity of resume creation tools.
                 </p>
                 <p className="text-lg text-gray-700">
-                  Founded by former HR professionals, ResumeBuilder was created to bridge the gap between job seekers and hiring managers. 
+                  Founded by former HR professionals, ResumeCon was created to bridge the gap between job seekers and hiring managers. 
                   We understand what recruiters look for and build our tools to meet those standards.
                 </p>
                 <div className="flex items-start gap-3 mt-6">
@@ -368,8 +375,15 @@ export default function AboutUs() {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 bg-gray-900 text-white flex items-center justify-center font-serif font-bold rounded">R</div>
-              <span className="font-serif font-bold text-xl">Resume<span className="text-gray-500">Builder</span></span>
+              {/* Updated: Replaced "R" circle with favicon */}
+              <img 
+                src="/favicon.png"
+                alt="ResumeCon Logo"
+                className="h-8 w-8 object-contain"
+              />
+              <span className="font-serif font-bold text-xl">
+                Resume<span className="text-blue-600">Con</span>
+              </span>
             </div>
             <nav className="flex flex-wrap justify-center gap-4">
               {navigation.map((item) => (
@@ -381,7 +395,7 @@ export default function AboutUs() {
               ))}
             </nav>
             <p className="text-sm text-gray-500 text-center md:text-right">
-              © {new Date().getFullYear()} ResumeBuilder. Empowering careers worldwide.
+              © {new Date().getFullYear()} ResumeCon. Empowering careers worldwide.
             </p>
           </div>
         </div>
