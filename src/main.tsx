@@ -1,5 +1,4 @@
 import { createRoot } from "react-dom/client";
-import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 import "./index.css";
 import { useEffect } from "react";
@@ -24,11 +23,7 @@ const Root = () => {
     document.head.appendChild(script2);
   }, []);
 
-  return (
-    <HelmetProvider>
-      <App />
-    </HelmetProvider>
-  );
+  return <App />;
 };
 
 createRoot(document.getElementById("root")!).render(<Root />);
