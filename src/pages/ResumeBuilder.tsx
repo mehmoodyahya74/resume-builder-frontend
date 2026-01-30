@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { useSearchParams } from 'wouter';
-import SEO from '@/components/SEO';
 import { ResumeForm } from '@/components/resume/ResumeForm';
 import { ResumePreview } from '@/components/resume/ResumePreview';
 import { ATSScoreChecker } from '@/components/resume/ATSScoreChecker';
@@ -271,12 +270,6 @@ console.log('✅ PDF downloaded successfully!');
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <SEO
-        title="Resume Builder - Create Your Professional CV Now"
-        description="Build your professional resume with our easy-to-use editor. Real-time preview, ATS optimization, and instant PDF download. Start creating your perfect CV now."
-        canonical="https://www.resumecon.xyz/builder"
-        keywords="resume editor, CV builder, create resume, professional CV maker, PDF resume"
-      />
       <header className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
