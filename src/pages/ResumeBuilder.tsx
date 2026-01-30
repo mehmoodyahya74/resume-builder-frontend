@@ -25,7 +25,6 @@ export default function ResumeBuilder() {
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Blog', href: '/blog' },
     { name: 'About Us', href: '/about' },
     { name: 'Contact', href: '/contact' },
     { name: 'Privacy Policy', href: '/privacy' },
