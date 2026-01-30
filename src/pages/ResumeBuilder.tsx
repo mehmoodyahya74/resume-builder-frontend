@@ -273,8 +273,15 @@ console.log('✅ PDF downloaded successfully!');
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
-              <div className="h-8 w-8 bg-gray-900 text-white flex items-center justify-center font-serif font-bold rounded">R</div>
-              <span className="font-serif font-bold text-xl tracking-tight">Resume<span className="text-gray500">Builder</span></span>
+              {/* Updated: Replaced "R" circle with favicon */}
+              <img 
+                src="/favicon.png"
+                alt="ResumeCon Logo"
+                className="h-8 w-8 object-contain"
+              />
+              <span className="font-serif font-bold text-xl tracking-tight">
+                Resume<span className="text-blue-600">Con</span>
+              </span>
             </div>
           </Link>
           
