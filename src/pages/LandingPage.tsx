@@ -203,14 +203,11 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
-              {/* Updated: Replaced "R" circle with favicon */}
-              <img 
-                src="/favicon.png"
-                alt="ResumeCon Logo"
-                className="h-8 w-8 object-contain"
-              />
+              <div className="h-8 w-8 bg-gray-900 text-white flex items-center justify-center font-bold rounded-lg">
+                R
+              </div>
               <span className="font-bold text-xl text-gray-900">
-                Resume<span className="text-blue-600">Con</span>
+                Resume<span className="text-gray-600">Builder</span>
               </span>
             </div>
           </Link>
@@ -311,16 +308,11 @@ export default function LandingPage() {
               </Badge>
               
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-snug">
-                <span className="block">
-                  The 100% Free Resume Builder
-                </span>
-                <span className="block text-blue-600">
-                  Getting You Hired Fast
-                </span>
+                Free Online Resume Builder
               </h1>
               
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Create an ATS-optimized resume that gets you interviews. 100% free, no credit card, no hidden fees. Trusted by 85,000+ job seekers.
+                Create an ATS-optimized CV that gets you interviews on Rozee.pk, Naukri.com & LinkedIn. 100% free, no credit card, perfect for freshers & professionals.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -416,13 +408,10 @@ export default function LandingPage() {
                       ATS Score: 98%
                     </Badge>
                     <div className="flex items-center gap-1 text-xs text-gray-600">
-                      {/* Updated: Replaced "R" circle with favicon */}
-                      <img 
-                        src="/favicon.png"
-                        alt="ResumeCon"
-                        className="h-4 w-4 object-contain"
-                      />
-                      <span>ResumeCon</span>
+                      <div className="h-4 w-4 bg-gray-900 rounded flex items-center justify-center text-white text-xs font-bold">
+                        R
+                      </div>
+                      <span>ResumeBuilder</span>
                     </div>
                   </div>
                 </div>
@@ -436,7 +425,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              Build Your Job-Ready Resume in <span className="text-blue-600">3 Easy Steps</span>
+              How to Create Your Resume in 3 Steps
             </h2>
             <p className="text-gray-600">
               Pick a template, add your content with AI help, download as PDF. No credit card required.
@@ -518,10 +507,10 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              Features of Our Free Resume Builder
+              Why Choose Our Resume Creator?
             </h2>
             <p className="text-gray-600">
-              AI-powered tools trusted by professionals at Google, Apple, Microsoft & more
+              AI-powered tools trusted by professionals in Pakistan, India & worldwide
             </p>
           </div>
 
@@ -552,10 +541,10 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              Job Seekers Love Our Resume Builder
+              Freshers & Professionals Love Our CV Builder
             </h2>
             <p className="text-gray-600">
-              Join 85,000+ professionals who landed interviews using ResumeBuilder
+              Join 85,000+ job seekers from Karachi, Lahore, Delhi, Mumbai who landed interviews
             </p>
           </div>
 
@@ -599,7 +588,7 @@ export default function LandingPage() {
               Secure & Trusted
             </Badge>
             <h2 className="text-2xl md:text-4xl font-bold text-white mb-6">
-              Ready to Make Your Free Resume?
+              Ready to Create Your Free CV?
             </h2>
             <p className="text-lg text-gray-300 mb-8">
               Join thousands who got interviews with our AI-optimized resumes
@@ -643,14 +632,11 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             <div className="lg:col-span-2">
               <div className="flex items-center gap-3 mb-6">
-                {/* Updated: Replaced "R" circle with favicon */}
-                <img 
-                  src="/favicon.png"
-                  alt="ResumeCon Logo"
-                  className="h-10 w-10 object-contain"
-                />
+                <div className="h-10 w-10 bg-white text-gray-900 flex items-center justify-center font-bold rounded-lg">
+                  R
+                </div>
                 <div>
-                  <span className="font-bold text-2xl">Resume<span className="text-blue-400">Con</span></span>
+                  <span className="font-bold text-2xl">Resume<span className="text-gray-400">Builder</span></span>
                 </div>
               </div>
               <p className="text-gray-400 mb-6 max-w-md">
@@ -700,7 +686,7 @@ export default function LandingPage() {
           <div className="border-t border-gray-800 pt-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-gray-500 text-sm">
-                © 2024 ResumeCon. All rights reserved.
+                © 2024 ResumeBuilder. All rights reserved.
               </div>
               <div className="flex items-center gap-4 text-sm text-gray-500">
                 <span>Made with <Heart size={12} className="inline text-red-500" /> for job seekers</span>
