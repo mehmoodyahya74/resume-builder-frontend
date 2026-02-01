@@ -9,6 +9,8 @@ import AboutUs from "@/pages/AboutUs";
 import Contact from "@/pages/Contact";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TemplateSelection from "@/pages/templates";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
 import NotFound from "@/pages/NotFound";
 
 function Router() {
@@ -20,6 +22,8 @@ function Router() {
       <Route path="/about" component={AboutUs} />
       <Route path="/contact" component={Contact} />
       <Route path="/privacy" component={PrivacyPolicy} />
+      <Route path="/blog" component={Blog} />
+      <Route path="/how-to-make-a-professional-resume-2026" component={BlogPost} />
       <Route component={NotFound} />
     </Switch>
   );
