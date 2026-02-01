@@ -222,6 +222,9 @@ export default function LandingPage() {
                   Templates
                 </Button>
               </Link>
+              <Link href="/blog">
+                <Button variant="ghost" className="font-medium hover:bg-gray-100 text-sm">Blog</Button>
+              </Link>
               <Link href="/about">
                 <Button variant="ghost" className="font-medium hover:bg-gray-100 text-sm">About Us</Button>
               </Link>
@@ -265,6 +268,15 @@ export default function LandingPage() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Templates
+                </Button>
+              </Link>
+              <Link href="/blog">
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start font-medium hover:bg-gray-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Blog
                 </Button>
               </Link>
               <Link href="/about">
@@ -677,6 +689,11 @@ export default function LandingPage() {
                     About Us
                   </Button>
                 </Link>
+                <Link href="/blog">
+                  <Button variant="link" className="text-gray-400 hover:text-white p-0 h-auto text-left block mt-2">
+                    Blog
+                  </Button>
+                </Link>
                 <Link href="/contact">
                   <Button variant="link" className="text-gray-400 hover:text-white p-0 h-auto text-left block mt-2">
                     Contact
@@ -688,7 +705,7 @@ export default function LandingPage() {
             <div>
               <h3 className="font-semibold mb-4">Legal</h3>
               <div className="space-y-2">
-                <Link href="privacy">
+                <Link href="/privacy">
                   <Button variant="link" className="text-gray-400 hover:text-white p-0 h-auto text-left">
                     Privacy Policy
                   </Button>
