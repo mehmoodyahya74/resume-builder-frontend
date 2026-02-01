@@ -33,6 +33,8 @@ interface FAQ {
 export default function Contact() {
   const navigation = [
     { name: 'Home', href: '/' },
+    { name: 'Templates', href: '/templates' },
+    { name: 'Blog', href: '/blog' },
     { name: 'About Us', href: '/about' },
     { name: 'Contact', href: '/contact' },
     { name: 'Privacy Policy', href: '/privacy' },
