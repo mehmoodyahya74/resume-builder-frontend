@@ -23,17 +23,6 @@ export default function ResumeBuilder() {
 
   const PDF_API_URL = 'https://rkak0mp4e7.execute-api.us-east-1.amazonaws.com/prod/generate-pdf';
 
-  const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'About Us', href: '/about' },
-    { name: 'Contact', href: '/contact' },
-    { name: 'Privacy Policy', href: '/privacy' },
-  ];
-
-  function escapeRegExp(string: string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
-
   const handleDownloadPDF = async () => {
     const element = printRef.current;
     if (!element) {
@@ -286,16 +275,6 @@ console.log('✅ PDF downloaded successfully!');
           </Link>
           
           <div className="flex items-center gap-6">
-            <nav className="hidden md:flex items-center gap-4">
-              {navigation.map((item) => (
-                <Link key={item.name} href={item.href}>
-                  <Button variant="ghost" className="font-medium">
-                    {item.name}
-                  </Button>
-                </Link>
-              ))}
-            </nav>
-
             <div className="md:hidden flex bg-muted rounded-lg p-1 mr-2">
               <button 
                 onClick={() => setActiveTab('edit')}
@@ -404,15 +383,15 @@ console.log('✅ PDF downloaded successfully!');
                       </p>
                       <ul className="text-sm text-gray-500 space-y-2 text-left">
                         <li className="flex items-start">
-                          <span className="inline-block h-5 w-5 bg-gray-100 rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">1</span>
+                          <span className="inline-block h-5 w-5 bg-gray-100 rounded-full items-center justify-center mr-2 mt-0.5 shrink-0">1</span>
                           Open this page on a desktop or laptop
                         </li>
                         <li className="flex items-start">
-                          <span className="inline-block h-5 w-5 bg-gray-100 rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">2</span>
+                          <span className="inline-block h-5 w-5 bg-gray-100 rounded-full items-center justify-center mr-2 mt-0.5 shrink-0">2</span>
                           Use desktop mode in your mobile browser settings
                         </li>
                         <li className="flex items-start">
-                          <span className="inline-block h-5 w-5 bg-gray-100 rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">3</span>
+                          <span className="inline-block h-5 w-5 bg-gray-100 rounded-full items-center justify-center mr-2 mt-0.5 shrink-0">3</span>
                           Continue editing now, preview later on desktop
                         </li>
                       </ul>
@@ -435,4 +414,8 @@ console.log('✅ PDF downloaded successfully!');
       </main>
     </div>
   );
+}
+
+function escapeRegExp(original: string) {
+  throw new Error('Function not implemented.');
 }
