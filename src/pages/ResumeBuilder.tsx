@@ -416,6 +416,6 @@ console.log('✅ PDF downloaded successfully!');
   );
 }
 
-function escapeRegExp(original: string) {
-  throw new Error('Function not implemented.');
+function escapeRegExp(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
