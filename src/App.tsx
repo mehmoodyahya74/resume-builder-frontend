@@ -3,7 +3,6 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import ResumeBuilder from "@/pages/ResumeBuilder";
 import LandingPage from "@/pages/LandingPage";
 import AboutUs from "@/pages/AboutUs";
@@ -13,8 +12,9 @@ import TemplateSelection from "@/pages/templates";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import NotFound from "@/pages/NotFound";
+import { useEffect } from "react";
 
-// SEO Component for each route
+// SEO Component WITHOUT react-helmet (temporary fix)
 const PageWithSEO = ({ 
   children, 
   title, 
@@ -25,25 +25,47 @@ const PageWithSEO = ({
   title: string;
   description: string;
   canonical?: string;
-}) => (
-  <>
-    <Helmet>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <link rel="canonical" href={canonical || "https://www.resumecon.xyz/"} />
-      
-      {/* OG Tags */}
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:url" content={canonical || "https://www.resumecon.xyz/"} />
-      
-      {/* Twitter Tags */}
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-    </Helmet>
-    {children}
-  </>
-);
+}) => {
+  useEffect(() => {
+    // Update title
+    document.title = title;
+    
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute('content', description);
+    
+    // Update canonical
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', canonical || "https://www.resumecon.xyz/");
+    
+    // Update OG tags
+    const updateMetaTag = (property: string, content: string) => {
+      let meta = document.querySelector(`meta[property="${property}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('property', property);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    };
+    
+    updateMetaTag('og:title', title);
+    updateMetaTag('og:description', description);
+    updateMetaTag('og:url', canonical || "https://www.resumecon.xyz/");
+  }, [title, description, canonical]);
+  
+  return <>{children}</>;
+};
 
 function Router() {
   return (
@@ -143,14 +165,12 @@ function Router() {
 
 function App() {
   return (
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </QueryClientProvider>
-    </HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Router />
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 }
 
