@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,9 +12,9 @@ import TemplateSelection from "@/pages/templates";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import NotFound from "@/pages/NotFound";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-// SEO Component WITHOUT react-helmet (temporary fix)
+// SEO Component
 const PageWithSEO = ({ 
   children, 
   title, 
@@ -27,10 +27,8 @@ const PageWithSEO = ({
   canonical?: string;
 }) => {
   useEffect(() => {
-    // Update title
     document.title = title;
     
-    // Update meta description
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -39,7 +37,6 @@ const PageWithSEO = ({
     }
     metaDescription.setAttribute('content', description);
     
-    // Update canonical
     let linkCanonical = document.querySelector('link[rel="canonical"]');
     if (!linkCanonical) {
       linkCanonical = document.createElement('link');
@@ -47,25 +44,45 @@ const PageWithSEO = ({
       document.head.appendChild(linkCanonical);
     }
     linkCanonical.setAttribute('href', canonical || "https://www.resumecon.xyz/");
-    
-    // Update OG tags
-    const updateMetaTag = (property: string, content: string) => {
-      let meta = document.querySelector(`meta[property="${property}"]`);
-      if (!meta) {
-        meta = document.createElement('meta');
-        meta.setAttribute('property', property);
-        document.head.appendChild(meta);
-      }
-      meta.setAttribute('content', content);
-    };
-    
-    updateMetaTag('og:title', title);
-    updateMetaTag('og:description', description);
-    updateMetaTag('og:url', canonical || "https://www.resumecon.xyz/");
   }, [title, description, canonical]);
   
   return <>{children}</>;
 };
+
+// Protected Builder Component - Only accessible via state
+function ProtectedBuilder() {
+  const [location, setLocation] = useLocation();
+  const [isValidAccess, setIsValidAccess] = useState(false);
+
+  useEffect(() => {
+    // Check if user came from a valid flow (e.g., selected a template)
+    // You can use localStorage, sessionStorage, or context to validate
+    const hasValidAccess = localStorage.getItem('resumeBuilderAccess') === 'true';
+    
+    if (!hasValidAccess) {
+      // Redirect to homepage if trying to access directly
+      setLocation('/');
+    } else {
+      setIsValidAccess(true);
+      // Clear the access flag after use
+      localStorage.removeItem('resumeBuilderAccess');
+    }
+  }, [setLocation]);
+
+  if (!isValidAccess) {
+    return null; // Or a loading spinner
+  }
+
+  return (
+    <PageWithSEO
+      title="Build Your Free Resume Online | ATS-Friendly Resume Maker 2026"
+      description="Build your resume step-by-step with our free online resume builder. Get AI suggestions, real-time preview, and download instantly. 50+ templates available."
+      canonical="https://www.resumecon.xyz/builder"
+    >
+      <ResumeBuilder />
+    </PageWithSEO>
+  );
+}
 
 function Router() {
   return (
@@ -80,15 +97,8 @@ function Router() {
         </PageWithSEO>
       </Route>
       
-      <Route path="/builder">
-        <PageWithSEO
-          title="Build Your Free Resume Online | ATS-Friendly Resume Maker 2026"
-          description="Build your resume step-by-step with our free online resume builder. Get AI suggestions, real-time preview, and download instantly. 50+ templates available."
-          canonical="https://www.resumecon.xyz/builder"
-        >
-          <ResumeBuilder />
-        </PageWithSEO>
-      </Route>
+      {/* REMOVE public /builder route */}
+      {/* <Route path="/builder" component={ResumeBuilder} /> */}
       
       <Route path="/templates">
         <PageWithSEO
