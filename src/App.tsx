@@ -99,14 +99,26 @@ function Router() {
       
       {/* ADD BACK THE BUILDER ROUTE - This fixes 404 on template click */}
       <Route path="/builder">
+  {() => {
+    // Check if URL has template parameter
+    const hasTemplateParam = window.location.search.includes('template=');
+    
+    if (hasTemplateParam) {
+      return (
         <PageWithSEO
           title="Build Your Free Resume Online | ATS-Friendly Resume Maker 2026"
-          description="Build your resume step-by-step with our free online resume builder. Get AI suggestions, real-time preview, and download instantly. 50+ templates available."
+          description="Build your resume step-by-step..."
           canonical="https://www.resumecon.xyz/builder"
         >
           <ResumeBuilder />
         </PageWithSEO>
-      </Route>
+      );
+    } else {
+      // Direct access without template parameter - show 404
+      return <NotFound />;
+    }
+  }}
+</Route>
       
       <Route path="/templates">
         <PageWithSEO
