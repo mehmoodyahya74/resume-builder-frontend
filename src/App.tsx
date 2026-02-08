@@ -1,4 +1,4 @@
-update in this without changing any other thing      import { Switch, Route, useLocation } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -97,8 +97,16 @@ function Router() {
         </PageWithSEO>
       </Route>
       
-      {/* REMOVE public /builder route */}
-      {/* <Route path="/builder" component={ResumeBuilder} /> */}
+      {/* ADD BACK THE BUILDER ROUTE - This fixes 404 on template click */}
+      <Route path="/builder">
+        <PageWithSEO
+          title="Build Your Free Resume Online | ATS-Friendly Resume Maker 2026"
+          description="Build your resume step-by-step with our free online resume builder. Get AI suggestions, real-time preview, and download instantly. 50+ templates available."
+          canonical="https://www.resumecon.xyz/builder"
+        >
+          <ResumeBuilder />
+        </PageWithSEO>
+      </Route>
       
       <Route path="/templates">
         <PageWithSEO
