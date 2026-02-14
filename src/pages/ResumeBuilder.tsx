@@ -24,6 +24,15 @@ export default function ResumeBuilder() {
   const PDF_API_URL = 'https://rkak0mp4e7.execute-api.us-east-1.amazonaws.com/prod/generate-pdf';
 
   const handleDownloadPDF = async () => {
+    // Track Facebook Pixel event
+    if (typeof window.fbq === 'function') {
+      fbq('track', 'Download', {
+        content_name: 'Resume Download',
+        content_type: 'pdf',
+        template: templateId
+      });
+    }
+
     const element = printRef.current;
     if (!element) {
       alert('Cannot generate PDF. Please try again.');
